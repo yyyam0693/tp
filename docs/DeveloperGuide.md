@@ -336,32 +336,111 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is RosterBolt and the **Actor** is the volunteer coordinator, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use Case: Define Command Alias**
 
-**MSS**
+**Preconditions: Application is initialized**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+**MSS:**
 
-    Use case ends.
+1. User requests to bind a specific alias to a specific target command.
+2. System validates that the given alias does not conflict with pre-existing commands.
+3. System maps the given alias to the given target command, and updates the storage file.
+4. System informs user that the new alias has been successfully defined.
+   Use case ends.
 
-**Extensions**
+**Extensions:**
 
-* 2a. The list is empty.
+* 2a. The given alias conflicts with an existing command.
+  * 2a1. System rejects the alias binding and issues an error.
+  * 2a2. Use case ends.
 
-  Use case ends.
+**Use Case: Handle Duplicate Contact**
 
-* 3a. The given index is invalid.
+**MSS:**
 
-    * 3a1. AddressBook shows an error message.
+1. System warns user that it detected a duplicate contact.
+2. System asks the user if they wish to proceed.
+3. User chooses to proceed.
+4. System returns a “Proceed” signal to the calling use case.
+   Use case ends.
 
-      Use case resumes at step 2.
+**Extensions:**
 
-*{More to be added}*
+* 2a. User chooses to cancel.
+  * 2a1. System returns a “Cancel” signal to the calling use case.
+  * 2a2. Use case ends.
+
+**Use Case: Add Volunteer Contact**
+
+**Preconditions: Application is initialized**
+
+**Guarantees: Existing volunteer records are not modified.**
+
+**MSS:**
+
+1. User requests to add a new volunteer, supplying the volunteer's contact details, tags, roles, and availability.
+2. System parses the arguments and validates the provided fields.
+3. System syncs the new volunteer record to the storage file.
+4. System informs user that the new volunteer has been added successfully.
+   Use case ends.
+
+**Extensions:**
+
+* 2a. System detects invalid data (e.g. malformed email address or phone number).
+  * 2a1. System stops the addition, and displays an error message detailing the specific validation failure.
+  * 2a2. Use case ends.
+
+* 2b. System detects a potential duplicate contact based on critical fields (e.g. duplicate email address or phone number).
+  * 2b1. System performs Handle Duplicate Contact.
+  * 2b2. If “Cancel” signal received, use case ends.
+  * 2b3. If “Proceed” signal received, use case resumes from Step 3.
+
+**Use Case: Assign Volunteer**
+
+**Preconditions: Application is initialized, target volunteer and the target event constraints exist within the system.**
+
+**Guarantees: Records of other volunteers are not modified.**
+
+**MSS:**
+
+1. User requests to assign a specific volunteer to a designated role for a specific event.
+2. System cross-references the volunteer's current assignments to ensure no overlapping commitments exist for the specified event.
+3. System cross-references the event's time period against the volunteer's registered availability windows.
+4. System appends the new assignment to the volunteer's record.
+5. System displays a confirmation of the assignment.
+   Use case ends.
+
+**Extensions:**
+
+* 2a. System detects a scheduling conflict with an existing assignment (i.e. double-booking).
+  * 2a1. System aborts the assignment, and issues an error detailing the conflicting event.
+  * 2a2. Use case ends.
+
+* 3a. The target event falls outside the volunteer's registered availability window.
+  * 3a1. System stops the assignment, and displays an out-of-availability warning.
+  * 3a2. User overrides the warning, acknowledging the out-of-availability assignment.
+  * 3a3. Use case resumes at Step 4.
+
+**Use Case: Export Roster Data to CSV**
+
+**Preconditions: Application is initialized**
+
+**MSS:**
+
+1. User requests an export of the current roster, specifying a destination file path.
+2. System serializes the current roster into a CSV file format.
+3. System executes a file write operation to the specified location on the local filesystem.
+4. System displays a success message indicating the CSV file was created.
+   Use case ends.
+
+**Extensions:**
+
+* 1a. User specifies a parameter to exclusively export specific fields (e.g. exporting only names and roles, omitting addresses and phone numbers).
+  * 1a1. System filters the serialized data, retaining only the explicitly requested columns.
+  * 1a2. Use case resumes at Step 3.
+
 
 ### Non-Functional Requirements
 
