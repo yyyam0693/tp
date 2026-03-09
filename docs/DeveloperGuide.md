@@ -262,13 +262,18 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Is a volunteer coordinator who oversees manpower requirements of recurring events
+* Manages contacts of 20-500 volunteers
+* Works alone instead of in a team
+* Prefers desktop apps over other types
+* Can type fast
+* Prefers typing to mouse interactions
+* Is reasonably comfortable using CLI apps
+* Values data privacy
+* May perform duties in locations without an Internet connection
+* Dislikes slow, repetitive tasks (e.g., editing tags of contacts one at a time)
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: RosterBolt is a single-user, offline, CLI-first contact management tool for volunteer coordinators to manage volunteers of recurring events (20-500 people). RosterBolt aims to reduce overhead of volunteer coordinators by streamlining repetitive admin work (e.g. deleting/modifying contacts in bulk) to enable them to efficiently and accurately manage volunteer manpower.
 
 
 ### User stories
