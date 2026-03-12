@@ -38,6 +38,23 @@ public class IndexTest {
     }
 
     @Test
+    public void compareTo() {
+        Index firstIndex = Index.fromZeroBased(0);
+        Index firstIndexCopy = Index.fromZeroBased(0);
+        Index secondIndex = Index.fromZeroBased(1);
+        Index thirdIndex = Index.fromZeroBased(2);
+
+        // compare to itself
+        assertEquals(0, firstIndex.compareTo(firstIndex));
+
+        // compare to another index
+        assertEquals(0, firstIndex.compareTo(firstIndexCopy));
+        assertTrue(firstIndex.compareTo(secondIndex) < 0);
+        assertTrue(secondIndex.compareTo(firstIndex) > 0);
+        assertTrue(secondIndex.compareTo(thirdIndex) < 0);
+    }
+
+    @Test
     public void equals() {
         final Index fifthPersonIndex = Index.fromOneBased(5);
 
