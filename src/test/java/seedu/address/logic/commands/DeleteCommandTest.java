@@ -97,7 +97,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_validSingleIndexListFilteredList_success() {
+    public void execute_validIndexListFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -125,7 +125,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_invalidSingleIndexListFilteredList_throwsCommandException() {
+    public void execute_invalidIndexListFilteredList_throwsCommandException() {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
