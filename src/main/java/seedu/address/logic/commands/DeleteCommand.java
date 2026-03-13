@@ -32,10 +32,6 @@ public class DeleteCommand extends Command {
 
     private final List<Index> targetIndices;
 
-    public DeleteCommand(Index targetIndex) {
-        this.targetIndices = List.of(targetIndex);
-    }
-
     public DeleteCommand(List<Index> targetIndices) {
         this.targetIndices = targetIndices;
     }
