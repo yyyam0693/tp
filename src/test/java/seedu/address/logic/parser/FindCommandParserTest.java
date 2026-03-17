@@ -4,6 +4,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATCH_TYPE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.logic.parser.FindMatchType.KEYWORD_TOKEN;
 
 import java.util.Arrays;
 
@@ -27,17 +28,17 @@ public class FindCommandParserTest {
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
         assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
-        assertParseSuccess(parser, PREFIX_MATCH_TYPE + "keyword Alice Bob", expectedFindCommand);
+        assertParseSuccess(parser, PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
-        assertParseSuccess(parser, " \n " + PREFIX_MATCH_TYPE + "keyword \n \t Alice  \t Bob  \t",
+        assertParseSuccess(parser, " \n " + PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " \n \t Alice  \t Bob  \t",
                 expectedFindCommand);
     }
 
     @Test
     public void parse_matchTypeNotFirstToken_throwsParseException() {
-        assertParseFailure(parser, "Alice " + PREFIX_MATCH_TYPE + "keyword Bob",
+        assertParseFailure(parser, "Alice " + PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " Bob",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
@@ -49,7 +50,7 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_missingKeywords_throwsParseException() {
-        assertParseFailure(parser, PREFIX_MATCH_TYPE + "keyword",
+        assertParseFailure(parser, PREFIX_MATCH_TYPE + KEYWORD_TOKEN,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 

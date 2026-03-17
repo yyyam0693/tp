@@ -9,6 +9,8 @@ import java.util.Optional;
 public enum FindMatchType {
     KEYWORD("keyword");
 
+    public static final String KEYWORD_TOKEN = KEYWORD.token;
+
     private final String token;
 
     FindMatchType(String token) {
