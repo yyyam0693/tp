@@ -1,17 +1,17 @@
-package seedu.address.model.person;
+package seedu.address.model.person.predicate;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.Person;
 
 /**
  * Tests that a {@code Person}'s fields match any of the keywords given.
  * Fields include name, phone, email, address, role, notes, and tags.
  */
-public class PersonContainsKeywordsPredicate implements Predicate<Person> {
+public class PersonContainsKeywordsPredicate implements PersonPredicate {
     private final List<String> keywords;
 
     public PersonContainsKeywordsPredicate(List<String> keywords) {
