@@ -1,20 +1,19 @@
-package seedu.address.model.person;
+package seedu.address.model.person.predicates;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.Person;
 
 /**
  * Tests that a {@code Person}'s fields match any of the keywords given.
  * Fields include name, phone, email, address, role, notes, and tags.
  */
-public class PersonContainsKeywordsPredicate implements Predicate<Person> {
+public abstract class PersonContainsFieldsPredicate implements PersonPredicate {
     private final List<String> keywords;
 
-    public PersonContainsKeywordsPredicate(List<String> keywords) {
+    public PersonContainsFieldsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
@@ -36,8 +35,10 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         Stream<String> tagFields = person.getTags().stream()
                 .map(tag -> tag.tagName);
         Stream<String> allFields = Stream.concat(simpleFields, tagFields);
-        return allFields.anyMatch(field -> StringUtil.containsWordIgnoreCase(field, keyword));
+        return allFields.anyMatch(field -> matchesField(field, keyword));
     }
+
+    protected abstract boolean matchesField(String field, String keyword);
 
     @Override
     public boolean equals(Object other) {
@@ -46,16 +47,16 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof PersonContainsKeywordsPredicate)) {
+        if (!(other instanceof PersonContainsFieldsPredicate)) {
             return false;
         }
 
-        PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
+        PersonContainsFieldsPredicate otherPredicate = (PersonContainsFieldsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", keywords).toString();
+        return new ToStringBuilder(this).add("keywords", this.keywords).toString();
     }
 }

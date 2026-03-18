@@ -114,19 +114,24 @@ Examples:
 
 Finds persons whose fields contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [m/MATCH_TYPE] KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * The search covers all fields: name, phone, email, address, role, notes, and tags.
-* Only full words will be matched e.g. `Han` will not match `Hans`
+* `m/kw` matches full words only. e.g. `Han` will not match `Hans`
+* `m/ss` matches substrings. e.g. `Han` will match `Hans`
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* `MATCH_TYPE` is optional. When omitted, keyword matching is used.
+* Currently supported `MATCH_TYPE`: `kw`, `ss`.
 
 Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find m/kw John` also returns `john` and `John Doe`
+* `find m/ss ali` returns `Alice Pauline` and `Ali Tan`
 
 ### Deleting a person : `delete`
 
@@ -195,6 +200,6 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]`<br> e.g., `delete 2 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find** | `find [m/MATCH_TYPE] KEYWORD [MORE_KEYWORDS]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`
 **List** | `list`
 **Help** | `help`
