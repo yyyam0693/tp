@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_MATCH_TYPE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.logic.parser.FindMatchType.KEYWORD_TOKEN;
+import static seedu.address.logic.parser.FindMatchType.SUBSTRING_TOKEN;
 
 import java.util.Arrays;
 
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.predicate.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.PersonContainsSubstringsPredicate;
 
 public class FindCommandParserTest {
 
@@ -30,10 +32,16 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
         assertParseSuccess(parser, PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " Alice Bob", expectedFindCommand);
 
+        FindCommand expectedSubstringFindCommand =
+                new FindCommand(new PersonContainsSubstringsPredicate(Arrays.asList("Alice", "Bob")));
+        assertParseSuccess(parser, PREFIX_MATCH_TYPE + SUBSTRING_TOKEN + " Alice Bob", expectedSubstringFindCommand);
+
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
         assertParseSuccess(parser, " \n " + PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " \n \t Alice  \t Bob  \t",
                 expectedFindCommand);
+        assertParseSuccess(parser, " \n " + PREFIX_MATCH_TYPE + SUBSTRING_TOKEN + " \n \t Alice  \t Bob  \t",
+                expectedSubstringFindCommand);
     }
 
     @Test

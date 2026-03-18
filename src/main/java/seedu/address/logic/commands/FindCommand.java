@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATCH_TYPE;
 import static seedu.address.logic.parser.FindMatchType.KEYWORD_TOKEN;
+import static seedu.address.logic.parser.FindMatchType.SUBSTRING_TOKEN;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -11,7 +12,7 @@ import seedu.address.model.person.predicate.PersonPredicate;
 
 /**
  * Finds and lists all persons in address book whose fields contain any of the argument keywords.
- * Keyword matching is case insensitive. Fields include name, phone, email, address, role, notes, and tags.
+ * Matching is case-insensitive. Fields include name, phone, email, address, role, notes, and tags.
  */
 public class FindCommand extends Command {
 
@@ -21,8 +22,9 @@ public class FindCommand extends Command {
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Searches across name, phone, email, address, role, notes, and tags.\n"
             + "Parameters: [" + PREFIX_MATCH_TYPE + "MATCH_TYPE] KEYWORD [MORE_KEYWORDS]...\n"
-            + "Currently supported MATCH_TYPE: " + KEYWORD_TOKEN + "\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " alice bob charlie";
+            + "Currently supported MATCH_TYPE: " + KEYWORD_TOKEN + ", " + SUBSTRING_TOKEN + "\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_MATCH_TYPE + KEYWORD_TOKEN + " alice bob charlie\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_MATCH_TYPE + SUBSTRING_TOKEN + " ali";
 
     private final PersonPredicate predicate;
 

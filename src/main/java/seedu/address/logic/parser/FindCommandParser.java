@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.predicate.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.PersonPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -25,18 +25,20 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(" " + args, PREFIX_MATCH_TYPE);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_MATCH_TYPE);
 
-        List<String> keywords = parseKeywords(argMultimap);
-        if (keywords.isEmpty()) {
+        ParsedFindArgs parsedFindArgs = parseFindArgs(argMultimap);
+        if (parsedFindArgs.keywords().isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        return new FindCommand(new PersonContainsKeywordsPredicate(keywords));
+        PersonPredicate predicate = parsedFindArgs.matchType().createPredicate(parsedFindArgs.keywords());
+        return new FindCommand(predicate);
     }
 
-    private List<String> parseKeywords(ArgumentMultimap argMultimap) throws ParseException {
+    private ParsedFindArgs parseFindArgs(ArgumentMultimap argMultimap) throws ParseException {
         Optional<String> matchTypeValue = argMultimap.getValue(PREFIX_MATCH_TYPE);
         String preamble = argMultimap.getPreamble().trim();
+        FindMatchType matchType = FindMatchType.KEYWORD;
 
         if (matchTypeValue.isPresent()) {
             if (!preamble.isEmpty()) {
@@ -46,26 +48,47 @@ public class FindCommandParser implements Parser<FindCommand> {
 
             String matchTypeArgs = matchTypeValue.get().trim();
             if (matchTypeArgs.isEmpty()) {
-                return List.of();
+                return new ParsedFindArgs(matchType, List.of());
             }
 
             String[] matchTypeTokens = matchTypeArgs.split("\\s+");
-            FindMatchType.fromToken(matchTypeTokens[0])
+            matchType = FindMatchType.fromToken(matchTypeTokens[0])
                     .orElseThrow(() -> new ParseException(
                             String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE)));
 
             if (matchTypeTokens.length == 1) {
-                return List.of();
+                return new ParsedFindArgs(matchType, List.of());
             }
 
-            return Arrays.asList(Arrays.copyOfRange(matchTypeTokens, 1, matchTypeTokens.length));
+            return new ParsedFindArgs(matchType,
+                    Arrays.asList(Arrays.copyOfRange(matchTypeTokens, 1, matchTypeTokens.length)));
         }
 
         if (preamble.isEmpty()) {
-            return List.of();
+            return new ParsedFindArgs(matchType, List.of());
         }
 
-        return Arrays.asList(preamble.split("\\s+"));
+        return new ParsedFindArgs(matchType, Arrays.asList(preamble.split("\\s+")));
     }
 
+    /**
+     * Stores the parsed match type and keywords extracted from a find command.
+     */
+    private static final class ParsedFindArgs {
+        private final FindMatchType matchType;
+        private final List<String> keywords;
+
+        private ParsedFindArgs(FindMatchType matchType, List<String> keywords) {
+            this.matchType = matchType;
+            this.keywords = keywords;
+        }
+
+        private FindMatchType matchType() {
+            return matchType;
+        }
+
+        private List<String> keywords() {
+            return keywords;
+        }
+    }
 }
