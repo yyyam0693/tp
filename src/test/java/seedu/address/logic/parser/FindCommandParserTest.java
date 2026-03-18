@@ -60,6 +60,8 @@ public class FindCommandParserTest {
     public void parse_missingKeywords_throwsParseException() {
         assertParseFailure(parser, PREFIX_MATCH_TYPE + KEYWORD_TOKEN,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, PREFIX_MATCH_TYPE + SUBSTRING_TOKEN,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
 }
