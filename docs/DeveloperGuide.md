@@ -163,9 +163,9 @@ The `find` command is implemented as a small "pipeline" that converts user input
 
 #### Parsing flow
 
-1. `FindCommandParser` tokenizes the input and extracts the optional match type prefix (`m/`). If the prefix is present, then the first token after `m/` is interpreted as the match type token and the remaining tokens become the keywords. When using `m/`, the preamble must be empty (keywords are only accepted after the match type). On the other hand, if the prefix is absent, the entire preamble is treated as keywords and the default match type (i.e. keyword matching) is used.
-2. `FindMatchType` maps the match type token to a concrete `PersonPredicate` via `createPredicate(...)`.
-3. `FindCommand` stores the predicate and executes by calling `Model#updateFilteredPersonList(predicate)`.
+The sequence diagram below shows how the `find` command arguments are tokenized and transformed into a `FindCommand` with the appropriate predicate.
+
+![Find Command Parsing Sequence Diagram](images/FindCommandParsingSequenceDiagram.png)
 
 #### Predicate structure
 
