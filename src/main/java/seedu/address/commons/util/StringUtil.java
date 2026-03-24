@@ -92,7 +92,9 @@ public class StringUtil {
     /**
      * Returns the Levenshtein distance between {@code s} and {@code t}.
      * Based on the algorithm described at
-     * <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">https://en.wikipedia.org/wiki/Levenshtein_distance</a>.
+     * <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">
+     *     https://en.wikipedia.org/wiki/Levenshtein_distance
+     * </a>.
      */
     private static int getLevenshteinDistance(String s, String t) {
         int m = s.length();
