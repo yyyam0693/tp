@@ -123,6 +123,65 @@ public class StringUtilTest {
         assertTrue(StringUtil.containsWordIgnoreCase("AAA bBb ccc  bbb", "bbB"));
     }
 
+    //---------------- Tests for containsFuzzyWordIgnoreCase --------------------------------------
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_nullWord_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.containsFuzzyWordIgnoreCase("typical sentence",
+            null, 1));
+    }
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_emptyWord_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Word parameter cannot be empty", ()
+            -> StringUtil.containsFuzzyWordIgnoreCase("typical sentence", "  ", 1));
+    }
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_multipleWords_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Word parameter should be a single word", ()
+            -> StringUtil.containsFuzzyWordIgnoreCase("typical sentence", "aaa BBB", 1));
+    }
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_nullSentence_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.containsFuzzyWordIgnoreCase(null, "abc", 1));
+    }
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_negativeThreshold_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Threshold must be non-negative", ()
+                -> StringUtil.containsFuzzyWordIgnoreCase("abc", "abc", -1));
+    }
+
+    @Test
+    public void containsFuzzyWordIgnoreCase_validInputs_correctResult() {
+        // Empty sentence
+        assertFalse(StringUtil.containsFuzzyWordIgnoreCase("", "abc", 1));
+        assertFalse(StringUtil.containsFuzzyWordIgnoreCase("    ", "abc", 1));
+
+        // No matching word within threshold
+        assertFalse(StringUtil.containsFuzzyWordIgnoreCase("aaa bbb ccc", "ddd", 1));
+
+        // Exact match with zero threshold
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Main Street", "Street", 0));
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Alice Bob", "bOb", 0));
+
+        // Matches within threshold (single edit)
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Alice Bob", "Alic", 1));
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Main Street", "Stret", 1));
+
+        // Matches within threshold (single insertion)
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Alice Bob", "Alicee", 1));
+
+        // Matches within threshold (single deletion)
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("Alice Bob", "Aice", 1));
+
+        // Multiple edits required (kitten -> sitting)
+        assertFalse(StringUtil.containsFuzzyWordIgnoreCase("kitten", "sitting", 2));
+        assertTrue(StringUtil.containsFuzzyWordIgnoreCase("kitten", "sitting", 3));
+    }
+
     //---------------- Tests for getDetails --------------------------------------
 
     /*
