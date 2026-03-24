@@ -64,7 +64,7 @@ public class PersonUtil {
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {
-                sb.append(PREFIX_TAG);
+                sb.append(PREFIX_TAG).append(" ");
             } else {
                 tags.forEach(s -> sb.append(PREFIX_TAG).append(s.tagName).append(" "));
             }
@@ -72,7 +72,7 @@ public class PersonUtil {
         if (descriptor.getAvailabilities().isPresent()) {
             Set<VolunteerAvailability> availabilities = descriptor.getAvailabilities().get();
             if (availabilities.isEmpty()) {
-                sb.append(PREFIX_AVAILABILITY);
+                sb.append(PREFIX_AVAILABILITY).append(" ");
             } else {
                 availabilities.forEach(s -> sb.append(PREFIX_AVAILABILITY)
                         .append(s.dayOfWeek).append(",")
@@ -83,7 +83,7 @@ public class PersonUtil {
         if (descriptor.getRecords().isPresent()) {
             Set<VolunteerRecord> records = descriptor.getRecords().get();
             if (records.isEmpty()) {
-                sb.append(PREFIX_RECORD);
+                sb.append(PREFIX_RECORD).append(" ");
             } else {
                 records.forEach(s -> sb.append(PREFIX_RECORD)
                         .append(s.startDateTime).append(",")

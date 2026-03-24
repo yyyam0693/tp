@@ -31,11 +31,12 @@ public class VolunteerRecordTest {
         LocalDateTime end1 = LocalDateTime.of(2026, 3, 20, 16, 0);
 
         LocalDateTime start2 = LocalDateTime.of(2026, 3, 21, 14, 0);
-        LocalDateTime end2 = LocalDateTime.of(2026, 3, 21, 16, 0);
+        LocalDateTime end2 = LocalDateTime.of(2026, 3, 20, 18, 0);
+        LocalDateTime end3 = LocalDateTime.of(2026, 3, 21, 16, 0);
 
         VolunteerRecord record1 = new VolunteerRecord(start1, end1);
         VolunteerRecord record1Copy = new VolunteerRecord(start1, end1);
-        VolunteerRecord record2 = new VolunteerRecord(start2, end1);
+        VolunteerRecord record2 = new VolunteerRecord(start2, end3);
         VolunteerRecord record3 = new VolunteerRecord(start1, end2);
 
         // same object -> returns true
