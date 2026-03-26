@@ -84,6 +84,7 @@ public class LogicManager implements Logic {
                 String.format(EDIT_PREVIOUS_MESSAGE_SUCCESS, lastExecutedCommandText),
                 false,
                 false,
+                false,
                 lastExecutedCommandText);
     }
 

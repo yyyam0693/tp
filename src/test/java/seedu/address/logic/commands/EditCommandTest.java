@@ -101,7 +101,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_availabilityAndRecordsSpecifiedUnfilteredList_success() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person personToEdit = model.getFilteredKeptPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder(personToEdit)
                 .withAvailabilities(VALID_AVAILABILITY_AMY)
                 .withRecords(VALID_RECORD_AMY)
@@ -122,7 +122,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_clearVolunteerSpecificFieldsUnfilteredList_success() {
-        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person originalPerson = model.getFilteredKeptPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person personToEdit = new PersonBuilder(originalPerson)
                 .withRole(VALID_ROLE_AMY)
                 .withNotes(VALID_NOTES_AMY)
@@ -155,7 +155,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_clearTagsUnfilteredList_success() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person personToEdit = model.getFilteredKeptPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder(personToEdit).withTags().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags().build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
