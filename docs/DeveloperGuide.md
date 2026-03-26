@@ -163,9 +163,15 @@ The `find` command is implemented as a small "pipeline" that converts user input
 
 #### Parsing flow
 
-The sequence diagram below shows how the `find` command arguments are tokenized and transformed into a `FindCommand` with the appropriate predicate.
+The sequence diagram below shows how the `find` command arguments are transformed into a `FindCommand` with the appropriate predicate.
 
 ![Find Command Parsing Sequence Diagram](images/FindCommandParsingSequenceDiagram.png)
+
+The parsing flow is as follows:
+* `LogicManager` calls `AddressBookParser#parseCommand()`, which instantiates a `FindCommandParser` for the `find` command.
+* If the user provides an `m/` prefix, `FindMatchType.fromToken()` is used to determine the match type before `ParsedFindArgs` is created; otherwise the default match type (i.e. keyword match type) is assumed when building `ParsedFindArgs`.
+* `FindMatchType.createPredicate(...)` creates a concrete, match-type-specific `PersonPredicate`.
+* `FindCommandParser` constructs the `FindCommand` with the predicate and returns it to `AddressBookParser`, which returns it to `LogicManager`.
 
 #### Predicate structure
 
