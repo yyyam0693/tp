@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,9 +48,8 @@ import seedu.address.storage.StorageManager;
 import seedu.address.testutil.PersonBuilder;
 
 /**
- * Reused from Codex suggestions upon providing specifications
+ * Some test cases in this class were adapted from Codex-generated test specifications.
  */
-
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
     private static final IOException DUMMY_AD_EXCEPTION = new AccessDeniedException("dummy access denied exception");
@@ -209,6 +209,63 @@ public class LogicManagerTest {
     @Test
     public void execute_invalidAliasTemplate_throwsParseException() {
         assertParseException("alias l ls", AliasCommand.MESSAGE_INVALID_ALIAS_TEMPLATE);
+    public void execute_editPreviousWithoutPreviousCommand_throwsCommandException() {
+        assertCommandException(LogicManager.EDIT_PREVIOUS_COMMAND_WORD,
+                LogicManager.EDIT_PREVIOUS_MESSAGE_NO_PREVIOUS_COMMAND);
+    }
+
+    @Test
+    public void execute_editPreviousListCommand_success() throws Exception {
+        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        CommandResult result = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
+
+        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+                result.getFeedbackToUser());
+        assertEquals(Optional.of(ListCommand.COMMAND_WORD), result.getCommandTextToPopulate());
+        assertEquals(expectedModel, model);
+    }
+
+    @Test
+    public void execute_editPreviousDeleteCommand_success() throws Exception {
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        resetLogic();
+
+        String deleteCommand = DeleteCommand.COMMAND_WORD + " 1";
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(ALICE);
+        assertCommandSuccess(deleteCommand,
+                DeleteCommand.buildSuccessMessage(List.of(ALICE)),
+                expectedModel);
+
+        CommandResult result = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
+        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, deleteCommand),
+                result.getFeedbackToUser());
+        assertEquals(Optional.of(deleteCommand), result.getCommandTextToPopulate());
+        assertEquals(expectedModel, model);
+    }
+
+    @Test
+    public void execute_repeatedEditPrevious_success() throws Exception {
+        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+
+        CommandResult firstResult = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
+        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+                firstResult.getFeedbackToUser());
+        assertEquals(Optional.of(ListCommand.COMMAND_WORD), firstResult.getCommandTextToPopulate());
+
+        CommandResult secondResult = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
+        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+                secondResult.getFeedbackToUser());
+        assertEquals(Optional.of(ListCommand.COMMAND_WORD), secondResult.getCommandTextToPopulate());
+    }
+
+    @Test
+    public void execute_editPreviousWithArguments_throwsParseException() {
+        assertParseException(LogicManager.EDIT_PREVIOUS_COMMAND_WORD + " extra",
+                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+                        LogicManager.EDIT_PREVIOUS_MESSAGE_USAGE));
     }
 
     @Test
