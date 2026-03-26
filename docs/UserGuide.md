@@ -100,7 +100,7 @@ Format: `list`
 
 Edits an existing person in RosterBolt.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/DAY,HH:mm,HH:mm]…​ [vr/yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -109,11 +109,13 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES]
 * You can remove all the person’s tags by typing `t/` without
     specifying any tags after it.
 * You can clear a person’s role or notes by typing `r/` or `nt/` without a value.
+* You can clear all volunteer availability or record entries by typing `va/` or `vr/` without a value.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 r/Coordinator nt/Brings first-aid kit` Edits the 3rd person’s role and notes.
+*  `edit 1 va/MONDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00` Replaces the 1st person's volunteer availability and volunteer records.
 
 ### Locating persons by keyword: `find`
 
@@ -204,7 +206,7 @@ Action | Format, Examples
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES]` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague r/Usher nt/Available weekends`
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]`<br> e.g., `delete 2 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee r/Usher nt/Prefers evenings`
+**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/DAY,HH:mm,HH:mm]…​ [vr/yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm]…​`<br> e.g.,`edit 2 n/James Lee r/Usher nt/Prefers evenings va/FRIDAY,18:00,20:00`
 **Find** | `find [m/MATCH_TYPE] KEYWORD [MORE_KEYWORDS]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`
 **List** | `list`
 **Help** | `help`
