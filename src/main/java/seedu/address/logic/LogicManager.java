@@ -55,34 +55,40 @@ public class LogicManager implements Logic {
         addressBookParser = new AddressBookParser();
     }
 
+    // Reused refactor suggestion from Codex to reduce indentation level and improve readability
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
         String trimmedCommandText = commandText.trim();
         Matcher commandMatcher = BASIC_COMMAND_FORMAT.matcher(trimmedCommandText);
-        if (commandMatcher.matches()) {
-            String commandWord = commandMatcher.group("commandWord");
-            String arguments = commandMatcher.group("arguments").trim();
-            if (EDIT_PREVIOUS_COMMAND_WORD.equals(commandWord)) {
-                if (!arguments.isEmpty()) {
-                    throw new ParseException(String.format(
-                            MESSAGE_INVALID_COMMAND_FORMAT, EDIT_PREVIOUS_MESSAGE_USAGE));
-                }
-                if (lastExecutedCommandText == null) {
-                    throw new CommandException(EDIT_PREVIOUS_MESSAGE_NO_PREVIOUS_COMMAND);
-                }
-                return new CommandResult(
-                        String.format(EDIT_PREVIOUS_MESSAGE_SUCCESS, lastExecutedCommandText),
-                        false,
-                        false,
-                        lastExecutedCommandText);
-            }
+        if (!commandMatcher.matches()) {
+            return executeNormalCommand(commandText);
         }
 
-        CommandResult commandResult;
+        String commandWord = commandMatcher.group("commandWord");
+        String arguments = commandMatcher.group("arguments").trim();
+        if (!EDIT_PREVIOUS_COMMAND_WORD.equals(commandWord)) {
+            return executeNormalCommand(commandText);
+        }
+
+        if (!arguments.isEmpty()) {
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, EDIT_PREVIOUS_MESSAGE_USAGE));
+        }
+        if (lastExecutedCommandText == null) {
+            throw new CommandException(EDIT_PREVIOUS_MESSAGE_NO_PREVIOUS_COMMAND);
+        }
+        return new CommandResult(
+                String.format(EDIT_PREVIOUS_MESSAGE_SUCCESS, lastExecutedCommandText),
+                false,
+                false,
+                lastExecutedCommandText);
+    }
+
+    private CommandResult executeNormalCommand(String commandText) throws CommandException, ParseException {
         Command command = addressBookParser.parseCommand(commandText);
-        commandResult = command.execute(model);
+        CommandResult commandResult = command.execute(model);
 
         try {
             storage.saveAddressBook(model.getAddressBook());
