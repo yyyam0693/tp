@@ -100,15 +100,15 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void updateFilteredPersonList_nullPredicate_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.updateFilteredPersonList(null));
+    public void updateFilteredKeptPersonList_nullPredicate_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.updateFilteredKeptPersonList(null));
     }
 
     @Test
     public void addPerson_filteredListResetsToShowAll() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         modelManager = new ModelManager(addressBook, new UserPrefs());
-        modelManager.updateFilteredPersonList(new PersonContainsKeywordsPredicate(
+        modelManager.updateFilteredKeptPersonList(new PersonContainsKeywordsPredicate(
                 Arrays.asList("Alice")));
 
         modelManager.addPerson(CARL);
@@ -141,17 +141,18 @@ public class ModelManagerTest {
         // different addressBook -> returns false
         assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
 
-        // different filteredList -> returns false
+        // different filteredList for kept persons -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
-        modelManager.updateFilteredPersonList(new PersonContainsKeywordsPredicate(Arrays.asList(keywords)));
+        modelManager.updateFilteredKeptPersonList(new PersonContainsKeywordsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
+        // both filteredLists are same -> returns true
         modelManager.setAddressBook(deletedAddressBook);
-        modelManager.updateFilteredPersonList(new PersonContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(deletedAddressBook, userPrefs)));
+        modelManager.updateFilteredKeptPersonList(new PersonContainsKeywordsPredicate(Arrays.asList(keywords)));
+        assertTrue(modelManager.equals(new ModelManager(deletedAddressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        modelManager.updateFilteredKeptPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();

@@ -65,7 +65,7 @@ public class FindCommandTest {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         PersonContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getFilteredKeptPersonList());
     }
@@ -75,7 +75,7 @@ public class FindCommandTest {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         PersonContainsKeywordsPredicate predicate = preparePredicate("street");
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, DANIEL, GEORGE), model.getFilteredKeptPersonList());
     }
@@ -85,7 +85,7 @@ public class FindCommandTest {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         PersonContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredKeptPersonList());
     }
@@ -96,7 +96,7 @@ public class FindCommandTest {
         PersonContainsSubstringsPredicate predicate =
                 new PersonContainsSubstringsPredicate(Collections.singletonList("ell"));
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(ELLE), model.getFilteredKeptPersonList());
     }
@@ -107,7 +107,7 @@ public class FindCommandTest {
         PersonContainsSubstringsPredicate predicate =
                 new PersonContainsSubstringsPredicate(Collections.singletonList("meie"));
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(BENSON, DANIEL), model.getFilteredKeptPersonList());
     }
@@ -118,7 +118,7 @@ public class FindCommandTest {
         PersonContainsFuzzyKeywordsPredicate predicate =
                 new PersonContainsFuzzyKeywordsPredicate(Collections.singletonList("michigan"));
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(ELLE), model.getFilteredKeptPersonList());
     }
@@ -129,7 +129,7 @@ public class FindCommandTest {
         PersonContainsFuzzyKeywordsPredicate predicate =
                 new PersonContainsFuzzyKeywordsPredicate(Collections.singletonList("stret"));
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.updateFilteredKeptPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, DANIEL, GEORGE), model.getFilteredKeptPersonList());
     }

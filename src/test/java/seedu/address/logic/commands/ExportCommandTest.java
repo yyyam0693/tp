@@ -208,7 +208,7 @@ public class ExportCommandTest {
         }
 
         @Override
-        public void updateFilteredPersonList(Predicate<Person> predicate) {
+        public void updateFilteredKeptPersonList(Predicate<Person> predicate) {
             fail("This method should not be called.");
         }
     }

@@ -80,7 +80,7 @@ public class DeleteCommandTest {
     public void execute_validIndexListFilteredListMultipleIndices_success() {
         Person firstPersonToDelete = model.getFilteredKeptPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPersonToDelete = model.getFilteredKeptPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        model.updateFilteredPersonList(p -> p.equals(firstPersonToDelete) || p.equals(secondPersonToDelete));
+        model.updateFilteredKeptPersonList(p -> p.equals(firstPersonToDelete) || p.equals(secondPersonToDelete));
         assertEquals(2, model.getFilteredKeptPersonList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
@@ -88,7 +88,8 @@ public class DeleteCommandTest {
         String expectedMessage = DeleteCommand.buildSuccessMessage(List.of(firstPersonToDelete, secondPersonToDelete));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.updateFilteredPersonList(p -> p.equals(firstPersonToDelete) || p.equals(secondPersonToDelete));
+        expectedModel.updateFilteredKeptPersonList(
+                p -> p.equals(firstPersonToDelete) || p.equals(secondPersonToDelete));
         expectedModel.deletePerson(firstPersonToDelete);
         expectedModel.deletePerson(secondPersonToDelete);
 
@@ -118,7 +119,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_invalidIndexListEmptyFilteredList_throwsCommandException() {
-        model.updateFilteredPersonList(p -> false);
+        model.updateFilteredKeptPersonList(p -> false);
 
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON));
         assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -126,7 +127,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validIndexListFilteredListNonContiguous_success() {
-        model.updateFilteredPersonList(person -> person.getName().fullName.equals("Alice Pauline")
+        model.updateFilteredKeptPersonList(person -> person.getName().fullName.equals("Alice Pauline")
                 || person.getName().fullName.equals("Fiona Kunz")
                 || person.getName().fullName.equals("George Best"));
         assertEquals(3, model.getFilteredKeptPersonList().size());
@@ -140,7 +141,7 @@ public class DeleteCommandTest {
         String expectedMessage = DeleteCommand.buildSuccessMessage(List.of(firstPersonToDelete, thirdPersonToDelete));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.updateFilteredPersonList(model.getFilteredKeptPersonList()::contains);
+        expectedModel.updateFilteredKeptPersonList(model.getFilteredKeptPersonList()::contains);
         expectedModel.deletePerson(firstPersonToDelete);
         expectedModel.deletePerson(thirdPersonToDelete);
 
@@ -197,7 +198,7 @@ public class DeleteCommandTest {
      * Updates {@code model}'s filtered list to show no one.
      */
     private void showNoPerson(Model model) {
-        model.updateFilteredPersonList(p -> false);
+        model.updateFilteredKeptPersonList(p -> false);
 
         assertTrue(model.getFilteredKeptPersonList().isEmpty());
     }
