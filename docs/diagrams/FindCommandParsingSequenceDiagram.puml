@@ -6,9 +6,10 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":FindCommandParser" as FindCommandParser LOGIC_COLOR
-participant "<<class>>\nFindMatchType" as FindMatchTypeClass LOGIC_COLOR
-participant "matchType:FindMatchType" as FindMatchType LOGIC_COLOR
+participant "<<class>>\nFindMatchTypeFactory" as FindMatchTypeFactoryClass LOGIC_COLOR
+participant ":FindMatchType" as FindMatchType LOGIC_COLOR
 participant ":ParsedFindArgs" as ParsedFindArgs LOGIC_COLOR
+participant ":PersonContainsFieldsPredicate" as PersonContainsFieldsPredicate LOGIC_COLOR
 participant "f:FindCommand" as FindCommand LOGIC_COLOR
 end box
 
@@ -25,10 +26,10 @@ activate FindCommandParser
 FindCommandParser -> FindCommandParser : parseFindArgs(...)
 activate FindCommandParser
 alt m/ prefix provided
-    FindCommandParser -> FindMatchTypeClass : fromToken()
-    activate FindMatchTypeClass
-    FindMatchTypeClass --> FindCommandParser : matchType
-    deactivate FindMatchTypeClass
+    FindCommandParser -> FindMatchTypeFactoryClass : fromToken()
+    activate FindMatchTypeFactoryClass
+    FindMatchTypeFactoryClass --> FindCommandParser : matchType
+    deactivate FindMatchTypeFactoryClass
     create ParsedFindArgs
     FindCommandParser -> ParsedFindArgs : ParsedFindArgs(...)
     activate ParsedFindArgs
@@ -45,7 +46,12 @@ deactivate FindCommandParser
 
 FindCommandParser -> FindMatchType : createPredicate(...)
 activate FindMatchType
-FindMatchType --> FindCommandParser : predicate:PersonContainsFieldsPredicate
+create PersonContainsFieldsPredicate
+FindMatchType -> PersonContainsFieldsPredicate : create concrete subclass of\nPersonContainsFieldsPredicate
+activate PersonContainsFieldsPredicate
+PersonContainsFieldsPredicate --> FindMatchType : predicate
+deactivate PersonContainsFieldsPredicate
+FindMatchType --> FindCommandParser : predicate
 deactivate FindMatchType
 
 create FindCommand
