@@ -28,9 +28,11 @@ public final class AsciiBarChart {
     /**
      * Renders a percentage bar chart for the given entries.
      * Each line includes the label, a scaled bar, and a percentage label derived from {@code total}.
+     * The {@code total} is an explicit scaling base and may differ from the sum of entry values,
+     * allowing percentages and bar lengths to be computed against a larger population or fixed baseline.
      *
      * @param entries Entries to render. Must not be null.
-     * @param total Total used to compute percentages. Must be non-negative, but zero is allowed.
+     * @param total Baseline used to compute percentages and bar scaling. Must be non-negative, but zero is allowed.
      * @return Rendered bar chart lines in entry order.
      */
     public List<String> renderPercentage(List<BarEntry> entries, int total) {
@@ -47,9 +49,11 @@ public final class AsciiBarChart {
     /**
      * Renders a relative-count bar chart for the given entries.
      * Each line includes the label, a scaled bar, and a count label with the provided unit.
+     * The {@code maxValue} is an explicit scaling cap and may differ from the max entry value,
+     * allowing consistent scaling across charts or against a known upper bound.
      *
      * @param entries Entries to render. Must not be null.
-     * @param maxValue Maximum value used to scale bars. Must be non-negative, but zero is allowed.
+     * @param maxValue Baseline used to scale bars. Must be non-negative, but zero is allowed.
      * @param unitLabel Unit label to append to each count. Must not be null.
      * @return Rendered bar chart lines in entry order.
      */
