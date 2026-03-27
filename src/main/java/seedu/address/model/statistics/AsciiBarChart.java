@@ -3,6 +3,7 @@ package seedu.address.model.statistics;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Renders ASCII bar charts for statistics output.
@@ -37,22 +38,10 @@ public final class AsciiBarChart {
         if (total < 0) {
             throw new IllegalArgumentException("Total must be non-negative.");
         }
-
-        int labelWidth = entries.stream()
-                .map(BarEntry::getLabel)
-                .mapToInt(String::length)
-                .max()
-                .orElse(0);
-
-        return entries.stream()
-                .map(entry -> {
-                    double percent = total == 0 ? 0.0 : (entry.getValue() * 100.0 / total);
-                    String percentageLabel = String.format("%.1f%% (%d)", percent, entry.getValue());
-                    String bar = BAR_CHARACTER.repeat(scaleToWidth(entry.getValue(), total));
-                    return String.format("%-" + labelWidth + "s | %s %s",
-                            entry.getLabel(), bar, percentageLabel);
-                })
-                .toList();
+        return render(entries, total, entry -> {
+            double percent = total == 0 ? 0.0 : (entry.getValue() * 100.0 / total);
+            return String.format("%.1f%% (%d)", percent, entry.getValue());
+        });
     }
 
     /**
@@ -70,7 +59,14 @@ public final class AsciiBarChart {
         if (maxValue < 0) {
             throw new IllegalArgumentException("Max value must be non-negative.");
         }
+        return render(entries, maxValue, entry -> String.format("%d %s", entry.getValue(), unitLabel));
+    }
 
+    /**
+     * Renders the given entries with a shared format using the provided label formatter.
+     */
+    private List<String> render(List<BarEntry> entries, int maxValue,
+            Function<BarEntry, String> labelFormatter) {
         int labelWidth = entries.stream()
                 .map(BarEntry::getLabel)
                 .mapToInt(String::length)
@@ -78,13 +74,18 @@ public final class AsciiBarChart {
                 .orElse(0);
 
         return entries.stream()
-                .map(entry -> {
-                    String bar = BAR_CHARACTER.repeat(scaleToWidth(entry.getValue(), maxValue));
-                    String countLabel = String.format("%d %s", entry.getValue(), unitLabel);
-                    return String.format("%-" + labelWidth + "s | %s %s",
-                            entry.getLabel(), bar, countLabel);
-                })
+                .map(entry -> formatLine(entry, labelWidth, maxValue, labelFormatter))
                 .toList();
+    }
+
+    /**
+     * Formats a single entry line with the label, scaled bar, and formatted value label.
+     */
+    private String formatLine(BarEntry entry, int labelWidth, int maxValue,
+            Function<BarEntry, String> labelFormatter) {
+        String bar = BAR_CHARACTER.repeat(scaleToWidth(entry.getValue(), maxValue));
+        return String.format("%-" + labelWidth + "s | %s %s",
+                entry.getLabel(), bar, labelFormatter.apply(entry));
     }
 
     /**
