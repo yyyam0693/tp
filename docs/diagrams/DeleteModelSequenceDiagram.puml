@@ -21,25 +21,11 @@ activate UniquePersonList
 UniquePersonList --> AddressBook
 deactivate UniquePersonList
 
-AddressBook -> AddressBook : hasDeletedPerson(p)
-activate AddressBook
-
-AddressBook -> DeletedPersonList : contains(p)
+AddressBook -> DeletedPersonList : add(p)
 activate DeletedPersonList
 
-DeletedPersonList --> AddressBook : result
+DeletedPersonList --> AddressBook
 deactivate DeletedPersonList
-
-AddressBook --> AddressBook : result
-deactivate AddressBook
-
-opt result = false
-    AddressBook -> DeletedPersonList : add(p)
-    activate DeletedPersonList
-
-    DeletedPersonList --> AddressBook
-    deactivate DeletedPersonList
-end
 
 AddressBook --> ModelManager
 deactivate AddressBook
