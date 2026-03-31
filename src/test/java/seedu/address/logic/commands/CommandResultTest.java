@@ -14,7 +14,8 @@ public class CommandResultTest {
 
         // same values -> returns true
         assertTrue(commandResult.equals(new CommandResult("feedback")));
-        assertTrue(commandResult.equals(new CommandResult("feedback", false, false, false)));
+        assertTrue(commandResult.equals(new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS)));
+        assertTrue(commandResult.equals(new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, false, false)));
 
         // same object -> returns true
         assertTrue(commandResult.equals(commandResult));
@@ -29,16 +30,18 @@ public class CommandResultTest {
         assertFalse(commandResult.equals(new CommandResult("different")));
 
         // different showBin value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", true, false, false)));
+        assertFalse(commandResult.equals(new CommandResult("feedback", ListToShow.KEPT_PERSONS, false, false)));
+        assertFalse(commandResult.equals(new CommandResult("feedback", ListToShow.DELETED_PERSONS, false, false)));
 
         // different showHelp value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", false, true, false)));
+        assertFalse(commandResult.equals(new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, true, false)));
 
         // different exit value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, true)));
+        assertFalse(commandResult.equals(new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, false, true)));
 
         // different commandTextToPopulate value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, false, "list")));
+        assertFalse(commandResult.equals(new CommandResult(
+                "feedback", ListToShow.SAME_AS_PREVIOUS, false, false, "list")));
     }
 
     @Test
@@ -52,17 +55,22 @@ public class CommandResultTest {
         assertNotEquals(commandResult.hashCode(), new CommandResult("different").hashCode());
 
         // different showBin value -> returns different hashcode
-        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", true, false, false).hashCode());
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", ListToShow.KEPT_PERSONS, false, false).hashCode());
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", ListToShow.DELETED_PERSONS, false, false).hashCode());
 
         // different showHelp value -> returns different hashcode
-        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true, false).hashCode());
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, true, false).hashCode());
 
         // different exit value -> returns different hashcode
-        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, false, true).hashCode());
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, false, true).hashCode());
 
         // different commandTextToPopulate value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(),
-                new CommandResult("feedback", false, false, false, "list").hashCode());
+                new CommandResult("feedback", ListToShow.SAME_AS_PREVIOUS, false, false, "list").hashCode());
     }
 
     @Test
@@ -70,9 +78,9 @@ public class CommandResultTest {
         CommandResult commandResult = new CommandResult("feedback");
         String expected = CommandResult.class.getCanonicalName()
                 + "{feedbackToUser=" + commandResult.getFeedbackToUser()
-                + ", isShowBin=" + commandResult.isShowBin()
-                + ", isShowHelp=" + commandResult.isShowHelp()
-                + ", isExit=" + commandResult.isExit()
+                + ", listToShow=" + commandResult.getListToShow()
+                + ", shouldShowHelp=" + commandResult.shouldShowHelp()
+                + ", shouldExit=" + commandResult.shouldExit()
                 + ", commandTextToPopulate=" + commandResult.getCommandTextToPopulate().orElse(null) + "}";
         assertEquals(expected, commandResult.toString());
     }

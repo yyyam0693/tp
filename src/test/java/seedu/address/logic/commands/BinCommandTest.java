@@ -19,13 +19,15 @@ public class BinCommandTest {
 
     private Model model;
     private Model expectedModel;
-    private CommandResult expectedCommandResult = new CommandResult(BinCommand.MESSAGE_SUCCESS, true, false, false);
+    private CommandResult expectedCommandResult = new CommandResult(
+            BinCommand.MESSAGE_SUCCESS, ListToShow.DELETED_PERSONS, false, false);
 
     @BeforeEach
     public void setUp() {
         model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedCommandResult = new CommandResult(BinCommand.MESSAGE_SUCCESS, true, false, false);
+        expectedCommandResult = new CommandResult(
+                BinCommand.MESSAGE_SUCCESS, ListToShow.DELETED_PERSONS, false, false);
     }
 
     @Test

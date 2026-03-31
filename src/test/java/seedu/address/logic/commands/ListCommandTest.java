@@ -65,7 +65,8 @@ public class ListCommandTest {
         expectedModel.updateFilteredKeptPersonList(PREDICATE_SHOW_ALL_PERSONS);
         expectedModel.updateSortedPersonList(new PersonSortComparator(SortAttribute.NAME, SortOrder.ASC));
         assertCommandSuccess(command, model,
-                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "name", "asc"), expectedModel);
+                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "name", "asc"),
+                ListToShow.KEPT_PERSONS, expectedModel);
         assertEquals(sortedTypicalPersons(SortAttribute.NAME, SortOrder.ASC), model.getFilteredKeptPersonList());
     }
 
@@ -75,7 +76,8 @@ public class ListCommandTest {
         expectedModel.updateFilteredKeptPersonList(PREDICATE_SHOW_ALL_PERSONS);
         expectedModel.updateSortedPersonList(new PersonSortComparator(SortAttribute.EMAIL, SortOrder.DESC));
         assertCommandSuccess(command, model,
-                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "email", "desc"), expectedModel);
+                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "email", "desc"),
+                ListToShow.KEPT_PERSONS, expectedModel);
         assertEquals(sortedTypicalPersons(SortAttribute.EMAIL, SortOrder.DESC), model.getFilteredKeptPersonList());
     }
 
@@ -86,7 +88,8 @@ public class ListCommandTest {
         expectedModel.updateFilteredKeptPersonList(PREDICATE_SHOW_ALL_PERSONS);
         expectedModel.updateSortedPersonList(new PersonSortComparator(SortAttribute.EMAIL, SortOrder.DESC));
         assertCommandSuccess(command, model,
-                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "email", "desc"), expectedModel);
+                String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "email", "desc"),
+                ListToShow.KEPT_PERSONS, expectedModel);
         assertEquals(sortedTypicalPersons(SortAttribute.EMAIL, SortOrder.DESC), model.getFilteredKeptPersonList());
     }
 
