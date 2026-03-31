@@ -15,7 +15,6 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ListToShow;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
@@ -113,7 +112,7 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        personListPanel = new PersonListPanel(logic.getFilteredKeptPersonList());
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
@@ -177,9 +176,7 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-            // TODO: fix
-            boolean shouldShowBin = commandResult.getListToShow() == ListToShow.DELETED_PERSONS;
-            ObservableList<Person> personList = logic.getFilteredPersonList(shouldShowBin);
+            ObservableList<Person> personList = logic.getFilteredPersonList();
             personListPanel.setPersonList(personList);
 
             if (commandResult.shouldShowHelp()) {

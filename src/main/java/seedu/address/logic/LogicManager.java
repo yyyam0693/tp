@@ -46,6 +46,7 @@ public class LogicManager implements Logic {
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
+    private ListToShow listToShow;
     private String lastExecutedCommandText;
 
     /**
@@ -55,6 +56,7 @@ public class LogicManager implements Logic {
         this.model = model;
         this.storage = storage;
         addressBookParser = new AddressBookParser();
+        listToShow = ListToShow.KEPT_PERSONS;
     }
 
     // Reused refactor suggestion from Codex to reduce indentation level and improve readability
@@ -93,6 +95,7 @@ public class LogicManager implements Logic {
         String expandedCommandText = expandAlias(commandText);
         Command command = addressBookParser.parseCommand(expandedCommandText);
         CommandResult commandResult = command.execute(model);
+        listToShow = ListToShow.updateListToShow(listToShow, commandResult.getListToShow());
 
         try {
             storage.saveAddressBook(model.getAddressBook());
@@ -113,13 +116,15 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ObservableList<Person> getFilteredKeptPersonList() {
-        return model.getFilteredKeptPersonList();
-    }
-
-    @Override
-    public ObservableList<Person> getFilteredPersonList(boolean isShowBin) {
-        return isShowBin ? model.getFilteredDeletedPersonList() : model.getFilteredKeptPersonList();
+    public ObservableList<Person> getFilteredPersonList() {
+        switch (listToShow) {
+        case KEPT_PERSONS:
+            return model.getFilteredKeptPersonList();
+        case DELETED_PERSONS:
+            return model.getFilteredDeletedPersonList();
+        default:
+            throw new IllegalStateException("Invalid listToShow: " + listToShow);
+        }
     }
 
     @Override
