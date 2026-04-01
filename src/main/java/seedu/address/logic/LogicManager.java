@@ -35,8 +35,6 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    private String lastExecutedCommandText;
-
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
      */
@@ -51,37 +49,14 @@ public class LogicManager implements Logic {
             throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        String trimmedCommandText = commandText.trim();
-        Matcher commandMatcher = BASIC_COMMAND_FORMAT.matcher(trimmedCommandText);
-        if (!commandMatcher.matches()) {
-            return executeNormalCommand(commandText);
-        }
-
-        String commandWord = commandMatcher.group("commandWord");
-        String arguments = commandMatcher.group("arguments").trim();
-        if (!EDIT_PREVIOUS_COMMAND_WORD.equals(commandWord)) {
-            return executeNormalCommand(commandText);
-        }
-
-        if (!arguments.isEmpty()) {
-            throw new ParseException(String.format(
-                    MESSAGE_INVALID_COMMAND_FORMAT, EDIT_PREVIOUS_MESSAGE_USAGE));
-        }
-        if (lastExecutedCommandText == null) {
-            throw new CommandException(EDIT_PREVIOUS_MESSAGE_NO_PREVIOUS_COMMAND);
-        }
-        return new CommandResult(
-                String.format(EDIT_PREVIOUS_MESSAGE_SUCCESS, lastExecutedCommandText),
-                personListView,
-                false,
-                false,
-                lastExecutedCommandText);
-    }
-
-    private CommandResult executeNormalCommand(String commandText) throws CommandException, ParseException {
         String expandedCommandText = expandAlias(commandText);
         Command command = addressBookParser.parseCommand(expandedCommandText);
         CommandResult commandResult = command.execute(model);
+
+        // EditPreviousCommand preserves the current view instead of switching.
+        if (command instanceof EditPreviousCommand) {
+            commandResult = replacePersonListView(commandResult, personListView);
+        }
 
         try {
             storage.saveAddressBook(model.getAddressBook());
@@ -142,5 +117,17 @@ public class LogicManager implements Logic {
         }
 
         return aliasTemplate + commandComponents.getArguments();
+    }
+
+    /**
+     * Returns a new {@code CommandResult} with the same fields but a different {@code PersonListView}.
+     */
+    private static CommandResult replacePersonListView(CommandResult result, PersonListView personListView) {
+        return new CommandResult(
+                result.getFeedbackToUser(),
+                personListView,
+                result.shouldShowHelp(),
+                result.shouldExit(),
+                result.getCommandTextToPopulate().orElse(null));
     }
 }

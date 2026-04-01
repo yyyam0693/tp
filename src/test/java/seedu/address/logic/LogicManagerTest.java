@@ -285,14 +285,6 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_editPreviousWithArguments_throwsParseException() {
-        assertParseException(LogicManager.EDIT_PREVIOUS_COMMAND_WORD + " extra",
-                PersonListView.KEPT_PERSONS,
-                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-                        LogicManager.EDIT_PREVIOUS_MESSAGE_USAGE));
-    }
-
-    @Test
     public void execute_storageThrowsIoException_throwsCommandException() {
         assertCommandFailureForExceptionFromStorage(DUMMY_IO_EXCEPTION, String.format(
                 LogicManager.FILE_OPS_ERROR_FORMAT, DUMMY_IO_EXCEPTION.getMessage()));

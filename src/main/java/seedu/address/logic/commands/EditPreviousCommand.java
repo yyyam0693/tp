@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.address.logic.PersonListView;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
@@ -31,7 +32,7 @@ public class EditPreviousCommand extends Command {
 
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, lastCommandText),
-                false,
+                PersonListView.KEPT_PERSONS,
                 false,
                 false,
                 lastCommandText);
