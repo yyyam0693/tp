@@ -113,7 +113,7 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
-* Alias validation uses `CommandWords` as the canonical source of reserved command words and allowed alias targets. When adding a new top-level command, update both `AddressBookParser` and `CommandWords` so parsing, alias-name reservation, and alias-target rules stay in sync.
+* Alias validation uses `CommandWords` as the canonical source of reserved command words and allowed alias targets. `TOP_LEVEL_COMMAND_WORDS` defines reserved command words, while allowed alias targets are derived from it by excluding disallowed meta-commands. When adding a new top-level command, update both `AddressBookParser` and `CommandWords` so parsing and alias behavior stay in sync.
 
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T12-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -399,6 +399,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2b. The target command word is not supported for aliasing.
   * 2b1. System rejects the alias binding and issues an error.
   * 2b2. Use case ends.
+
+**Startup behavior note (aliases):**
+- On application startup, aliases loaded from preferences are revalidated against current alias rules.
+- Invalid entries are removed, and a one-time warning is shown in the result display.
 
 **Use Case: Handle Duplicate Contact**
 

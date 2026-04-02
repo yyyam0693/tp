@@ -114,10 +114,11 @@ Creates a custom alias for a supported built-in command word.
 Format: `alias SHORT COMMAND_WORD`
 
 * `SHORT` must be a lowercase command-word-style token.
-* `COMMAND_WORD` must be exactly one supported built-in command word: `add`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, or `list`.
+* `COMMAND_WORD` must be exactly one supported built-in command word: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, or `stats`.
 * Alias expansion replaces only the leading command word and appends the rest of the user input unchanged.
 * `alias`, `aliases`, `unalias`, and `editprev` cannot be used as alias targets.
 * Aliases are treated as workflow preferences rather than roster data, so they are persisted in the user preferences file (default: `preferences.json`).
+* If invalid aliases are detected in `preferences.json` at startup, they are removed and shown once in the result display.
 
 Examples:
 * `alias ls list`
