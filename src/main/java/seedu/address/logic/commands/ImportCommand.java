@@ -7,11 +7,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import seedu.address.commons.util.CsvImportFileResult;
-import seedu.address.commons.util.CsvImportRowError;
-import seedu.address.commons.util.CsvImportRowSuccess;
-import seedu.address.commons.util.CsvReaderUtil;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.csv.CsvImportFileResult;
+import seedu.address.logic.csv.CsvImportRowError;
+import seedu.address.logic.csv.CsvImportRowSuccess;
+import seedu.address.logic.csv.CsvReaderUtil;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -80,7 +81,7 @@ public class ImportCommand extends Command {
 
     private Person findDuplicatePerson(Model model, List<Person> personsImportedThisRun, Person person) {
         if (model.hasPerson(person)) {
-            for (Person existingPerson : model.getAddressBook().getPersonList()) {
+            for (Person existingPerson : model.getAddressBook().getKeptPersonList()) {
                 if (existingPerson.isSamePerson(person)) {
                     return existingPerson;
                 }
@@ -150,5 +151,12 @@ public class ImportCommand extends Command {
         return other == this
                 || (other instanceof ImportCommand
                 && filePath.equals(((ImportCommand) other).filePath));
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("filePath", filePath)
+                .toString();
     }
 }

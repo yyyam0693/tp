@@ -2,6 +2,7 @@ package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -15,6 +16,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,16 +32,17 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.CommandWords;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.EditPreviousCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.UnaliasCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.predicates.PersonContainsSubstringsPredicate;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -74,31 +77,34 @@ public class LogicManagerTest {
     @Test
     public void execute_invalidCommandFormat_throwsParseException() {
         String invalidCommand = "uicfhmowqewca";
-        assertParseException(invalidCommand, MESSAGE_UNKNOWN_COMMAND);
+        assertParseException(invalidCommand, PersonListView.KEPT_PERSONS, MESSAGE_UNKNOWN_COMMAND);
     }
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandException(deleteCommand, PersonListView.KEPT_PERSONS, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
-        assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess(listCommand, PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
     }
 
     @Test
     public void execute_aliasExpandedCommand_success() throws Exception {
         model.setCommandAlias("ls", ListCommand.COMMAND_WORD);
-        assertCommandSuccess("ls", ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess("ls", PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
     }
 
     @Test
     public void execute_aliasExpandedCommandWithTrailingWhitespace_success() throws Exception {
         model.setCommandAlias("ls", ListCommand.COMMAND_WORD);
-        assertCommandSuccess("ls   ", ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess("ls   ", PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
     }
 
     @Test
@@ -111,7 +117,8 @@ public class LogicManagerTest {
         expectedModel.setCommandAlias("rm", DeleteCommand.COMMAND_WORD);
         expectedModel.deletePerson(ALICE);
 
-        assertCommandSuccess("rm 1", DeleteCommand.buildSuccessMessage(List.of(ALICE)), expectedModel);
+        assertCommandSuccess("rm 1", PersonListView.KEPT_PERSONS,
+                DeleteCommand.buildSuccessMessage(List.of(ALICE)), expectedModel);
     }
 
     @Test
@@ -124,26 +131,45 @@ public class LogicManagerTest {
         expectedModel.setCommandAlias("rm", DeleteCommand.COMMAND_WORD);
         expectedModel.deletePerson(ALICE);
 
-        assertCommandSuccess("rm 1   ", DeleteCommand.buildSuccessMessage(List.of(ALICE)), expectedModel);
+        assertCommandSuccess("rm 1   ", PersonListView.KEPT_PERSONS,
+                DeleteCommand.buildSuccessMessage(List.of(ALICE)), expectedModel);
     }
 
     @Test
-    public void execute_aliasExpandedCommandToClear_success() throws Exception {
+    public void execute_aliasExpandedFindCommandWithArguments_success() throws Exception {
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model.setCommandAlias("ss", "find");
+        resetLogic();
+
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        expectedModel.setCommandAlias("ss", "find");
+        expectedModel.updateFilteredKeptPersonList(
+                new PersonContainsSubstringsPredicate(Collections.singletonList("meie")));
+
+        assertCommandSuccess("ss m/ss meie", PersonListView.KEPT_PERSONS,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2), expectedModel);
+    }
+
+    @Test
+    public void execute_aliasExpandedMetaCommand_success() throws Exception {
         model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         model.setCommandAlias("wipe", ClearCommand.COMMAND_WORD);
         resetLogic();
 
-        Model expectedModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel.setCommandAlias("wipe", ClearCommand.COMMAND_WORD);
+        new ClearCommand().execute(expectedModel);
 
-        assertCommandSuccess("wipe", ClearCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess("wipe", PersonListView.KEPT_PERSONS,
+                ClearCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
     public void execute_validCommand_savesUserPrefs() throws Exception {
         model.setCommandAlias("ls", ListCommand.COMMAND_WORD);
 
-        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess(ListCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
 
         UserPrefs readBack = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json")).readUserPrefs().get();
         assertEquals(Map.of("ls", ListCommand.COMMAND_WORD), readBack.getCommandAliases());
@@ -154,10 +180,11 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setCommandAlias("ls", ListCommand.COMMAND_WORD);
 
-        assertCommandSuccess("alias ls list",
+        assertCommandSuccess("alias ls list", PersonListView.DELETED_PERSONS,
                 String.format(AliasCommand.MESSAGE_SUCCESS, "ls", ListCommand.COMMAND_WORD),
                 expectedModel);
-        assertCommandSuccess("ls", ListCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess("ls", PersonListView.DELETED_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
@@ -168,7 +195,8 @@ public class LogicManagerTest {
         String expectedMessage = AliasesCommand.MESSAGE_ALIASES_HEADER
                 + "\nls -> " + ListCommand.COMMAND_WORD
                 + "\nrm -> " + DeleteCommand.COMMAND_WORD;
-        assertCommandSuccess(AliasesCommand.COMMAND_WORD, expectedMessage, model);
+        assertCommandSuccess(AliasesCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS,
+                expectedMessage, model);
     }
 
     @Test
@@ -176,35 +204,47 @@ public class LogicManagerTest {
         model.setCommandAlias("ls", ListCommand.COMMAND_WORD);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertCommandSuccess("unalias ls", String.format(UnaliasCommand.MESSAGE_SUCCESS, "ls"), expectedModel);
+        assertCommandSuccess("unalias ls", PersonListView.KEPT_PERSONS,
+                String.format(UnaliasCommand.MESSAGE_SUCCESS, "ls"), expectedModel);
     }
 
     @Test
     public void execute_duplicateAliasCommand_throwsCommandException() {
         model.setCommandAlias("ls", ListCommand.COMMAND_WORD);
-        assertCommandException("alias ls list", AliasCommand.MESSAGE_DUPLICATE_ALIAS);
+        assertCommandException("alias ls list", PersonListView.DELETED_PERSONS,
+                AliasCommand.MESSAGE_DUPLICATE_ALIAS);
     }
 
     @Test
     public void execute_reservedAliasName_throwsParseException() {
-        assertParseException("alias list help", AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
-        assertParseException("alias import help", AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
-        assertParseException("alias export help", AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
-        assertParseException("alias editprev help", AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
+        assertParseException("alias list help", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
+        assertParseException("alias import help", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
+        assertParseException("alias export help", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
+        assertParseException("alias editprev help", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_NAME);
     }
 
     @Test
     public void execute_invalidAliasTemplate_throwsParseException() {
-        assertParseException("alias l ls", AliasCommand.MESSAGE_INVALID_ALIAS_TEMPLATE);
-        assertParseException("alias l find m/ss meie", AliasCommand.MESSAGE_INVALID_ALIAS_TEMPLATE);
+        assertParseException("alias l ls", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_INVALID_ALIAS_TEMPLATE);
+        assertParseException("alias l find m/ss meie", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_INVALID_ALIAS_TEMPLATE);
     }
 
     @Test
     public void execute_reservedAliasTarget_throwsParseException() {
-        assertParseException("alias aa alias", AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
-        assertParseException("alias aa aliases", AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
-        assertParseException("alias aa unalias", AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
-        assertParseException("alias aa editprev", AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
+        assertParseException("alias aa alias", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
+        assertParseException("alias aa aliases", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
+        assertParseException("alias aa unalias", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
+        assertParseException("alias aa editprev", PersonListView.KEPT_PERSONS,
+                AliasCommand.MESSAGE_RESERVED_ALIAS_TARGET);
     }
 
     @Test
@@ -234,7 +274,8 @@ public class LogicManagerTest {
 
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel.setCommandAlias("good", ListCommand.COMMAND_WORD);
-        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(ListCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, expectedModel);
 
         UserPrefs readBack = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json")).readUserPrefs().get();
         assertEquals(Map.of("good", ListCommand.COMMAND_WORD), readBack.getCommandAliases());
@@ -242,18 +283,19 @@ public class LogicManagerTest {
 
     @Test
     public void execute_editPreviousWithoutPreviousCommand_throwsCommandException() {
-        assertCommandException(LogicManager.EDIT_PREVIOUS_COMMAND_WORD,
-                LogicManager.EDIT_PREVIOUS_MESSAGE_NO_PREVIOUS_COMMAND);
+        assertCommandException(EditPreviousCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS,
+                EditPreviousCommand.MESSAGE_NO_PREVIOUS_COMMAND);
     }
 
     @Test
     public void execute_editPreviousListCommand_success() throws Exception {
-        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess(ListCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        CommandResult result = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
+        CommandResult result = logic.execute(EditPreviousCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS);
 
-        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+        assertEquals(String.format(EditPreviousCommand.MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
                 result.getFeedbackToUser());
         assertEquals(Optional.of(ListCommand.COMMAND_WORD), result.getCommandTextToPopulate());
         assertEquals(expectedModel, model);
@@ -268,11 +310,12 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel.deletePerson(ALICE);
         assertCommandSuccess(deleteCommand,
+                PersonListView.KEPT_PERSONS,
                 DeleteCommand.buildSuccessMessage(List.of(ALICE)),
                 expectedModel);
 
-        CommandResult result = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
-        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, deleteCommand),
+        CommandResult result = logic.execute(EditPreviousCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS);
+        assertEquals(String.format(EditPreviousCommand.MESSAGE_SUCCESS, deleteCommand),
                 result.getFeedbackToUser());
         assertEquals(Optional.of(deleteCommand), result.getCommandTextToPopulate());
         assertEquals(expectedModel, model);
@@ -280,24 +323,20 @@ public class LogicManagerTest {
 
     @Test
     public void execute_repeatedEditPrevious_success() throws Exception {
-        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+        assertCommandSuccess(ListCommand.COMMAND_WORD, PersonListView.DELETED_PERSONS,
+                ListCommand.MESSAGE_SUCCESS, model);
 
-        CommandResult firstResult = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
-        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+        CommandResult firstResult = logic.execute(
+                EditPreviousCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS);
+        assertEquals(String.format(EditPreviousCommand.MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
                 firstResult.getFeedbackToUser());
         assertEquals(Optional.of(ListCommand.COMMAND_WORD), firstResult.getCommandTextToPopulate());
 
-        CommandResult secondResult = logic.execute(LogicManager.EDIT_PREVIOUS_COMMAND_WORD);
-        assertEquals(String.format(LogicManager.EDIT_PREVIOUS_MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
+        CommandResult secondResult = logic.execute(
+                EditPreviousCommand.COMMAND_WORD, PersonListView.KEPT_PERSONS);
+        assertEquals(String.format(EditPreviousCommand.MESSAGE_SUCCESS, ListCommand.COMMAND_WORD),
                 secondResult.getFeedbackToUser());
         assertEquals(Optional.of(ListCommand.COMMAND_WORD), secondResult.getCommandTextToPopulate());
-    }
-
-    @Test
-    public void execute_editPreviousWithArguments_throwsParseException() {
-        assertParseException(LogicManager.EDIT_PREVIOUS_COMMAND_WORD + " extra",
-                String.format(seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT,
-                        LogicManager.EDIT_PREVIOUS_MESSAGE_USAGE));
     }
 
     @Test
@@ -313,8 +352,8 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
+    public void getFilteredKeptPersonList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredKeptPersonList().remove(0));
     }
 
     /**
@@ -322,39 +361,39 @@ public class LogicManagerTest {
      * - no exceptions are thrown <br>
      * - the feedback message is equal to {@code expectedMessage} <br>
      * - the internal model manager state is the same as that in {@code expectedModel} <br>
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, PersonListView, Class, String, Model)
      */
-    private void assertCommandSuccess(String inputCommand, String expectedMessage,
-            Model expectedModel) throws CommandException, ParseException {
-        CommandResult result = logic.execute(inputCommand);
+    private void assertCommandSuccess(String inputCommand, PersonListView personListView,
+            String expectedMessage, Model expectedModel) throws CommandException, ParseException {
+        CommandResult result = logic.execute(inputCommand, personListView);
         assertEquals(expectedMessage, result.getFeedbackToUser());
         assertEquals(expectedModel, model);
     }
 
     /**
      * Executes the command, confirms that a ParseException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, PersonListView, Class, String, Model)
      */
-    private void assertParseException(String inputCommand, String expectedMessage) {
-        assertCommandFailure(inputCommand, ParseException.class, expectedMessage);
+    private void assertParseException(String inputCommand, PersonListView personListView, String expectedMessage) {
+        assertCommandFailure(inputCommand, personListView, ParseException.class, expectedMessage);
     }
 
     /**
      * Executes the command, confirms that a CommandException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, PersonListView, Class, String, Model)
      */
-    private void assertCommandException(String inputCommand, String expectedMessage) {
-        assertCommandFailure(inputCommand, CommandException.class, expectedMessage);
+    private void assertCommandException(String inputCommand, PersonListView personListView, String expectedMessage) {
+        assertCommandFailure(inputCommand, personListView, CommandException.class, expectedMessage);
     }
 
     /**
      * Executes the command, confirms that the exception is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, PersonListView, Class, String, Model)
      */
-    private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
-            String expectedMessage) {
+    private void assertCommandFailure(String inputCommand, PersonListView personListView,
+            Class<? extends Throwable> expectedException, String expectedMessage) {
         Model expectedModel = new ModelManager(model.getAddressBook(), model.getUserPrefs());
-        assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
+        assertCommandFailure(inputCommand, personListView, expectedException, expectedMessage, expectedModel);
     }
 
     /**
@@ -362,11 +401,11 @@ public class LogicManagerTest {
      * - the {@code expectedException} is thrown <br>
      * - the resulting error message is equal to {@code expectedMessage} <br>
      * - the internal model manager state is the same as that in {@code expectedModel} <br>
-     * @see #assertCommandSuccess(String, String, Model)
+     * @see #assertCommandSuccess(String, PersonListView, String, Model)
      */
-    private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
-            String expectedMessage, Model expectedModel) {
-        assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand));
+    private void assertCommandFailure(String inputCommand, PersonListView personListView,
+            Class<? extends Throwable> expectedException, String expectedMessage, Model expectedModel) {
+        assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand, personListView));
         assertEquals(expectedModel, model);
     }
 
@@ -400,6 +439,7 @@ public class LogicManagerTest {
         Person expectedPerson = new PersonBuilder(AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
-        assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+        assertCommandFailure(addCommand, PersonListView.KEPT_PERSONS,
+                CommandException.class, expectedMessage, expectedModel);
     }
 }

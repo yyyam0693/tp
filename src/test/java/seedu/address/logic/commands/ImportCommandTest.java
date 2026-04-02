@@ -92,6 +92,14 @@ public class ImportCommandTest {
         }
     }
 
+    @Test
+    public void toStringMethod() {
+        Path filePath = Path.of("data/volunteers.csv");
+        ImportCommand importCommand = new ImportCommand(filePath);
+        String expected = ImportCommand.class.getCanonicalName() + "{filePath=" + filePath + "}";
+        assertEquals(expected, importCommand.toString());
+    }
+
     private abstract static class ModelStub implements Model {
 
         @Override
@@ -181,17 +189,39 @@ public class ImportCommandTest {
         }
 
         @Override
-        public ObservableList<Person> getFilteredPersonList() {
+        public ObservableList<Person> getFilteredKeptPersonList() {
             return FXCollections.observableArrayList();
         }
 
         @Override
-        public void updateFilteredPersonList(Predicate<Person> predicate) {
+        public ObservableList<Person> getFilteredDeletedPersonList() {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void deleteAllPersons() {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredKeptPersonList(Predicate<Person> predicate) {
             fail("This method should not be called.");
         }
 
         @Override
         public void updateSortedPersonList(Comparator<Person> comparator) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public String getLastCommandText() {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void setLastCommandText(String commandText) {
             fail("This method should not be called.");
         }
     }
