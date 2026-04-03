@@ -148,7 +148,7 @@ public class CommandTestUtil {
      * that takes a string {@code expectedMessage} and PersonListView {@code expectedPersonListView}.
      */
     public static void assertCommandSuccess(Command command, Model actualModel, String expectedMessage,
-                                            PersonListView expectedPersonListView, Model expectedModel) {
+            PersonListView expectedPersonListView, Model expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, expectedPersonListView);
         assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel);
     }
@@ -158,8 +158,8 @@ public class CommandTestUtil {
      * that takes a string {@code expectedMessage} and PersonListView {@code expectedPersonListView}.
      */
     public static void assertCommandSuccess(Command command, Model actualModel, PersonListView personListView,
-                                            String expectedMessage, PersonListView expectedPersonListView,
-                                            Model expectedModel) {
+            String expectedMessage, PersonListView expectedPersonListView,
+            Model expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, expectedPersonListView);
         assertCommandSuccess(command, actualModel, personListView, expectedCommandResult, expectedModel);
     }
