@@ -22,6 +22,7 @@ import seedu.address.logic.PersonListView;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.PersonContainsKeywordsPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
@@ -188,11 +189,15 @@ public class CommandTestUtil {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
         AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
-        List<Person> expectedFilteredList = new ArrayList<>(actualModel.getFilteredKeptPersonList());
+        UserPrefs expectedUserPrefs = new UserPrefs(actualModel.getUserPrefs());
+        List<Person> expectedFilteredKeptList = new ArrayList<>(actualModel.getFilteredKeptPersonList());
+        List<Person> expectedFilteredDeletedList = new ArrayList<>(actualModel.getFilteredDeletedPersonList());
 
         assertThrows(CommandException.class, expectedMessage, () -> command.execute(actualModel));
         assertEquals(expectedAddressBook, actualModel.getAddressBook());
-        assertEquals(expectedFilteredList, actualModel.getFilteredKeptPersonList());
+        assertEquals(expectedUserPrefs, actualModel.getUserPrefs());
+        assertEquals(expectedFilteredKeptList, actualModel.getFilteredKeptPersonList());
+        assertEquals(expectedFilteredDeletedList, actualModel.getFilteredDeletedPersonList());
     }
 
     /**
@@ -206,11 +211,15 @@ public class CommandTestUtil {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
         AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
-        List<Person> expectedFilteredList = new ArrayList<>(actualModel.getFilteredKeptPersonList());
+        UserPrefs expectedUserPrefs = new UserPrefs(actualModel.getUserPrefs());
+        List<Person> expectedFilteredKeptList = new ArrayList<>(actualModel.getFilteredKeptPersonList());
+        List<Person> expectedFilteredDeletedList = new ArrayList<>(actualModel.getFilteredDeletedPersonList());
 
         assertThrows(CommandException.class, expectedMessage, () -> command.execute(actualModel, personListView));
         assertEquals(expectedAddressBook, actualModel.getAddressBook());
-        assertEquals(expectedFilteredList, actualModel.getFilteredKeptPersonList());
+        assertEquals(expectedUserPrefs, actualModel.getUserPrefs());
+        assertEquals(expectedFilteredKeptList, actualModel.getFilteredKeptPersonList());
+        assertEquals(expectedFilteredDeletedList, actualModel.getFilteredDeletedPersonList());
     }
 
     /**
