@@ -34,6 +34,9 @@ import seedu.address.logic.commands.StatsCommand;
 import seedu.address.logic.commands.UnaliasCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.VolunteerAvailability;
+import seedu.address.model.person.predicates.CombinedAndPersonPredicate;
+import seedu.address.model.person.predicates.PersonAvailableDuringPredicate;
 import seedu.address.model.person.predicates.PersonContainsKeywordsPredicate;
 import seedu.address.model.person.sort.SortAttribute;
 import seedu.address.model.person.sort.SortOrder;
@@ -99,6 +102,28 @@ public class AddressBookParserTest {
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommand_findWithAvailability() throws Exception {
+        VolunteerAvailability query = VolunteerAvailability.fromString("MONDAY,14:00,17:00");
+        PersonAvailableDuringPredicate predicate = new PersonAvailableDuringPredicate(query);
+        FindCommand command = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " va/MONDAY,14:00,17:00");
+        assertEquals(new FindCommand(predicate), command);
+    }
+
+    @Test
+    public void parseCommand_findWithAvailabilityAndKeywords() throws Exception {
+        VolunteerAvailability query = VolunteerAvailability.fromString("MONDAY,14:00,17:00");
+        PersonAvailableDuringPredicate availPredicate = new PersonAvailableDuringPredicate(query);
+        PersonContainsKeywordsPredicate textPredicate =
+                new PersonContainsKeywordsPredicate(Arrays.asList("alice"));
+        FindCommand expected = new FindCommand(
+                new CombinedAndPersonPredicate(List.of(textPredicate, availPredicate)));
+        FindCommand command = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " va/MONDAY,14:00,17:00 alice");
+        assertEquals(expected, command);
     }
 
     @Test
