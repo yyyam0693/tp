@@ -114,7 +114,7 @@ Creates a custom alias for a supported built-in command word.
 Format: `alias SHORT COMMAND_WORD`
 
 * `SHORT` must be a lowercase command-word-style token.
-* `COMMAND_WORD` must be exactly one supported built-in command word: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, or `stats`.
+* `COMMAND_WORD` must be exactly one supported built-in command word: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, `restore` or `stats`.
 * Alias expansion replaces only the leading command word and appends the rest of the user input unchanged.
 * `alias`, `aliases`, `unalias`, and `editprev` cannot be used as alias targets.
 * Aliases are treated as workflow preferences rather than roster data, so they are persisted in the user preferences file (default: `preferences.json`).
@@ -226,6 +226,24 @@ Examples:
 * `list` followed by `delete 2 3` deletes the 2nd and 3rd persons in RosterBolt.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Restoring a deleted person : `restore`
+
+Restores the specified persons from RosterBolt.
+
+You must be viewing the recycle bin to use this command.
+
+Format: `restore INDEX [MORE_INDICES]`
+
+* Restores the person at the specified indices.
+* Indices refer to index numbers shown in the displayed person list.
+* Indices **must be positive integers** 1, 2, 3, …​
+* Restored persons will be removed from the recycle bin and added to the working list of kept contacts.
+* You cannot restore persons who are duplicates of existing contacts in the working list.
+* You cannot restore two persons who are duplicates of each other in the recycle bin.
+
+Examples:
+* `bin` followed by `restore 2 3` restores the 2nd and 3rd persons in the recycle bin.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from RosterBolt.
@@ -302,4 +320,5 @@ Action | Format, Examples
 **Find** | `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`, `find m/fz michigan`, `find va/MONDAY,14:00,17:00`, `find va/MONDAY,14:00,17:00 alice`
 **List** | `list [ATTRIBUTE [asc｜desc]]`<br> e.g., `list name desc`
 **Help** | `help`
+**Restore** | `restore INDEX [MORE_INDICES]`<br> e.g., `restore 2 3`
 **Stats** | `stats CATEGORY`<br> e.g., `stats role`, `stats record`
