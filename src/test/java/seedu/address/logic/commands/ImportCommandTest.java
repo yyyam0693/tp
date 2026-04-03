@@ -252,6 +252,11 @@ public class ImportCommandTest {
         }
 
         @Override
+        public void updateFilteredDeletedPersonList(Predicate<Person> predicate) {
+            fail("This method should not be called.");
+        }
+
+        @Override
         public void updateSortedPersonList(Comparator<Person> comparator) {
             fail("This method should not be called.");
         }

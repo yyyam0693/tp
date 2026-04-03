@@ -179,6 +179,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void updateFilteredDeletedPersonList(Predicate<Person> predicate) {
+        requireNonNull(predicate);
+        filteredDeletedPersons.setPredicate(predicate);
+    }
+
+    @Override
     public void updateSortedPersonList(Comparator<Person> comparator) {
         sortComparator = comparator;
         sortedPersons.setComparator(comparator);

@@ -125,6 +125,12 @@ public interface Model {
     void updateFilteredKeptPersonList(Predicate<Person> predicate);
 
     /**
+     * Updates the filter of the filtered deleted person list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
+    void updateFilteredDeletedPersonList(Predicate<Person> predicate);
+
+    /**
      * Updates the sorting of the filtered person list using the given {@code comparator}.
      * A {@code null} comparator removes sorting and restores the original order.
      */
