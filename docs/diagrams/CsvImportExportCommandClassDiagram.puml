@@ -46,8 +46,8 @@ ImportCommandParser --|> ImportCommandParserType
 ExportCommandParserType ..> Parser
 ImportCommandParserType ..> Parser
 
-ExportCommand ..|> Command
-ImportCommand ..|> Command
+ExportCommand --|> Command
+ImportCommand --|> Command
 
 ExportCommand ..> CsvWriterUtil
 
