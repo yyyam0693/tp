@@ -39,6 +39,7 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model, PersonListView personListView) throws CommandException {
         requireNonNull(model);
+        requireViewingKeptPersons(personListView);
         List<Person> lastShownList = model.getFilteredKeptPersonList();
         requireIndicesInRange(model);
         List<Person> personsToDelete = new ArrayList<>();
