@@ -32,7 +32,13 @@ public class DeleteCommand extends Command {
 
     private final List<Index> targetIndices;
 
+    /**
+     * Constructs a DeleteCommand object.
+     *
+     * @param targetIndices Indices of persons to restore in increasing order without duplicates.
+     */
     public DeleteCommand(List<Index> targetIndices) {
+        assert isStrictlyIncreasing(targetIndices) : "targetIndices should be in increasing order without duplicates";
         this.targetIndices = List.copyOf(targetIndices); //defensive copy to ensure immutability
     }
 
@@ -54,6 +60,15 @@ public class DeleteCommand extends Command {
         }
 
         return new CommandResult(buildSuccessMessage(personsToDelete), PersonListView.KEPT_PERSONS);
+    }
+
+    private boolean isStrictlyIncreasing(List<Index> indices) {
+        for (int i = 0; i + 1 < indices.size(); i++) {
+            if (indices.get(i).compareTo(indices.get(i + 1)) >= 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void requireIndicesInRange(Model model) throws CommandException {
