@@ -139,14 +139,6 @@ Format: `unalias SHORT`
 
 Examples:
 * `unalias ls`
-### Showing recycle bin of recently deleted persons : `bin`
-
-Shows the recycle bin, which contains all recently deleted persons in RosterBolt.
-
-Format: `bin`
-
-* Persons deleted by the `clear` and `delete` commands will be added to the recycle bin.
-* The recycle bin is cleared when the application is closed.
 
 ### Editing a person : `edit`
 
@@ -226,6 +218,24 @@ Examples:
 * `list` followed by `delete 2 3` deletes the 2nd and 3rd persons in RosterBolt.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Importing volunteers from a CSV file : `import`
+
+Imports volunteers from a CSV file into the active address book.
+
+Format: `import FILE_PATH`
+
+Examples:
+* `import data/volunteers.csv`
+
+### Exporting volunteers to a CSV file : `export`
+
+Exports all active volunteers in the address book to a CSV file.
+
+Format: `export FILE_PATH`
+
+Examples:
+* `export data/volunteers.csv`
+
 ### Clearing all entries : `clear`
 
 Clears all entries from RosterBolt.
@@ -294,12 +304,14 @@ Action | Format, Examples
 **Alias** | `alias SHORT COMMAND_WORD`<br> e.g., `alias ls list`
 **Aliases** | `aliases`
 **Unalias** | `unalias SHORT`<br> e.g., `unalias ls`
-**Bin** | `bin`
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]`<br> e.g., `delete 2 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com va/MONDAY,14:00,17:00`
+**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com va/MONDAY,14:00,17:00`
 **Edit Previous** | `editprev`
+**Export** | `export FILE_PATH`<br> e.g., `export data/volunteers.csv`
 **Find** | `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`, `find m/fz michigan`, `find va/MONDAY,14:00,17:00`, `find va/MONDAY,14:00,17:00 alice`
-**List** | `list [ATTRIBUTE [asc｜desc]]`<br> e.g., `list name desc`
+**Import** | `import FILE_PATH`<br> e.g., `import data/volunteers.csv`
+**List** | `list [ATTRIBUTE [asc|desc]]`<br> e.g., `list name desc`
+**Exit** | `exit`
 **Help** | `help`
 **Stats** | `stats CATEGORY`<br> e.g., `stats role`, `stats record`
