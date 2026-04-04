@@ -313,6 +313,7 @@ Action | Format, Examples
 **Alias** | `alias SHORT COMMAND_WORD`<br> e.g., `alias ls list`
 **Aliases** | `aliases`
 **Unalias** | `unalias SHORT`<br> e.g., `unalias ls`
+**Bin** | `bin`
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]`<br> e.g., `delete 2 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com va/MONDAY,14:00,17:00`
