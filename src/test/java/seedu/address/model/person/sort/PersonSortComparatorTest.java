@@ -57,7 +57,7 @@ public class PersonSortComparatorTest {
     }
 
     @Test
-    public void compare_allAttributesAscending_returnsExpectedOrder() {
+    public void compare_allAttributesAscendingAndDescending_returnsExpectedOrder() {
         Person first = new PersonBuilder()
                 .withName("alice")
                 .withPhone("12345")
@@ -81,6 +81,13 @@ public class PersonSortComparatorTest {
         assertTrue(new PersonSortComparator(SortAttribute.ROLE, SortOrder.ASC).compare(first, second) < 0);
         assertTrue(new PersonSortComparator(SortAttribute.TAG, SortOrder.ASC).compare(first, second) < 0);
         assertTrue(new PersonSortComparator(SortAttribute.VR, SortOrder.ASC).compare(first, second) < 0);
+
+        assertTrue(new PersonSortComparator(SortAttribute.NAME, SortOrder.DESC).compare(first, second) > 0);
+        assertTrue(new PersonSortComparator(SortAttribute.PHONE, SortOrder.DESC).compare(first, second) > 0);
+        assertTrue(new PersonSortComparator(SortAttribute.EMAIL, SortOrder.DESC).compare(first, second) > 0);
+        assertTrue(new PersonSortComparator(SortAttribute.ROLE, SortOrder.DESC).compare(first, second) > 0);
+        assertTrue(new PersonSortComparator(SortAttribute.TAG, SortOrder.DESC).compare(first, second) > 0);
+        assertTrue(new PersonSortComparator(SortAttribute.VR, SortOrder.DESC).compare(first, second) > 0);
     }
 
     @Test
