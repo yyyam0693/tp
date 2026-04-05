@@ -101,8 +101,7 @@ Format: `list [ATTRIBUTE [asc|desc]]`
 * Currently supported `ATTRIBUTE`: `name`, `phone`, `email`, `role`, `tag`, or `vr`.
 * Order defaults to `asc` when omitted.
 * Omitting `ATTRIBUTE` shows the list in the default order.
-* `vr` sorts by the end time of each volunteer's most recent record
-  * `asc` lists least-recently served first, while `desc` lists most-recently served first).
+* `vr` sorts by the end time of each volunteer's most recent record (i.e., `asc` lists least-recently served first, while `desc` lists most-recently served first).
   * Volunteers without records are treated as least-recently served.
 
 Examples:
