@@ -499,27 +499,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 2b2. If “Cancel” signal received, use case ends.
   * 2b3. If “Proceed” signal received, use case resumes from Step 3.
 
-**Use Case: Assign Volunteer**
-
-**Preconditions: Application is initialized, target volunteer and the target event constraints exist within the system.**
-
-**Guarantees: Records of other volunteers are not modified.**
-
-**MSS:**
-
-1. User requests to assign a specific volunteer to a designated role for a specific event.
-2. System cross-references the volunteer's current assignments to ensure no overlapping commitments exist for the specified event.
-3. System verifies the event's time period falls within the volunteer's registered availability windows.
-4. System appends the new assignment to the volunteer's record.
-5. System displays a confirmation of the assignment.
-   Use case ends.
-
-**Extensions:**
-
-* 2a. System detects a scheduling conflict with an existing assignment (i.e. double-booking).
-  * 2a1. System aborts the assignment, and issues an error detailing the conflicting event.
-  * 2a2. Use case ends.
-
 **Use Case: Export Roster Data to CSV**
 
 **Preconditions: Application is initialized**
