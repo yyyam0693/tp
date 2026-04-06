@@ -3,10 +3,11 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.Command.MESSAGE_NOT_VIEWING_DELETED_PERSONS;
+import static seedu.address.logic.Messages.MESSAGE_NOT_VIEWING_DELETED_PERSONS;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showDeletedPersonAtIndex;
+import static seedu.address.logic.commands.CommandTestUtil.showNoDeletedPerson;
 import static seedu.address.logic.commands.RestoreCommand.MESSAGE_DUPLICATE_PERSONS_TO_RESTORE;
 import static seedu.address.logic.commands.RestoreCommand.MESSAGE_PERSON_ALREADY_IN_KEPT_PERSONS;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -200,7 +201,7 @@ public class RestoreCommandTest {
     @Test
     public void execute_invalidIndexListEmptyFilteredList_throwsCommandException() {
         setUpModelWithDeletedPersons();
-        model.updateFilteredDeletedPersonList(p -> false);
+        showNoDeletedPerson(model);
 
         RestoreCommand restoreCommand = new RestoreCommand(List.of(INDEX_FIRST_PERSON));
         assertCommandFailure(restoreCommand, model, PersonListView.DELETED_PERSONS,

@@ -3,8 +3,10 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.Messages.MESSAGE_NOT_VIEWING_KEPT_PERSONS;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showNoPerson;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.PersonListView;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -31,6 +34,13 @@ public class DeleteCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
+    public void execute_notViewingKeptPersons_throwsCommandException() {
+        DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON));
+        assertCommandFailure(deleteCommand, model, PersonListView.DELETED_PERSONS,
+                MESSAGE_NOT_VIEWING_KEPT_PERSONS);
+    }
+
+    @Test
     public void execute_validIndexListUnfilteredList_success() {
         Person firstPersonToDelete = model.getFilteredKeptPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPersonToDelete = model.getFilteredKeptPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
@@ -42,7 +52,8 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(firstPersonToDelete);
         expectedModel.deletePerson(secondPersonToDelete);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                expectedMessage, PersonListView.KEPT_PERSONS, expectedModel);
     }
 
     @Test
@@ -51,10 +62,12 @@ public class DeleteCommandTest {
 
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredKeptPersonList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(List.of(outOfBoundIndex));
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         DeleteCommand deleteCommandMultiple = new DeleteCommand(List.of(INDEX_FIRST_PERSON, outOfBoundIndex));
-        assertCommandFailure(deleteCommandMultiple, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommandMultiple, model, PersonListView.KEPT_PERSONS,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         // ensures that model state is unchanged after failed command
         assertEquals(model, expectedModel);
@@ -73,7 +86,8 @@ public class DeleteCommandTest {
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
         expectedModel.deletePerson(personToDelete);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                expectedMessage, PersonListView.KEPT_PERSONS, expectedModel);
     }
 
     @Test
@@ -93,7 +107,8 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(firstPersonToDelete);
         expectedModel.deletePerson(secondPersonToDelete);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                expectedMessage, PersonListView.KEPT_PERSONS, expectedModel);
     }
 
     @Test
@@ -108,10 +123,12 @@ public class DeleteCommandTest {
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getKeptPersonList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(List.of(outOfBoundIndex));
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         DeleteCommand deleteCommandMultiple = new DeleteCommand(List.of(INDEX_FIRST_PERSON, outOfBoundIndex));
-        assertCommandFailure(deleteCommandMultiple, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommandMultiple, model, PersonListView.KEPT_PERSONS,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         // ensures that model state is unchanged after failed command
         assertEquals(model, expectedModel);
@@ -119,10 +136,11 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_invalidIndexListEmptyFilteredList_throwsCommandException() {
-        model.updateFilteredKeptPersonList(p -> false);
+        showNoPerson(model);
 
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON));
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
@@ -145,7 +163,8 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(firstPersonToDelete);
         expectedModel.deletePerson(thirdPersonToDelete);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(deleteCommand, model, PersonListView.KEPT_PERSONS,
+                expectedMessage, PersonListView.KEPT_PERSONS, expectedModel);
         assertEquals(List.of(secondPersonToRemain), model.getFilteredKeptPersonList());
     }
 
@@ -192,14 +211,5 @@ public class DeleteCommandTest {
         String actualMessage = DeleteCommand.buildSuccessMessage(List.of(firstPerson, secondPerson));
 
         assertEquals(expectedMessage, actualMessage);
-    }
-
-    /**
-     * Updates {@code model}'s filtered list to show no one.
-     */
-    private void showNoPerson(Model model) {
-        model.updateFilteredKeptPersonList(p -> false);
-
-        assertTrue(model.getFilteredKeptPersonList().isEmpty());
     }
 }

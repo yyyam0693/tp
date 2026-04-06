@@ -1,8 +1,11 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.commands.CommandUtil.collectItemsByIndices;
+import static seedu.address.logic.commands.CommandUtil.isStrictlyIncreasing;
+import static seedu.address.logic.commands.CommandUtil.requireIndicesInRange;
+import static seedu.address.logic.commands.CommandUtil.requireViewingKeptPersons;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
@@ -32,35 +35,32 @@ public class DeleteCommand extends Command {
 
     private final List<Index> targetIndices;
 
+    /**
+     * Constructs a DeleteCommand object.
+     *
+     * @param targetIndices Indices of persons to restore in increasing order without duplicates.
+     */
     public DeleteCommand(List<Index> targetIndices) {
+        assert isStrictlyIncreasing(targetIndices) : "targetIndices should be in increasing order without duplicates";
         this.targetIndices = List.copyOf(targetIndices); //defensive copy to ensure immutability
     }
 
     @Override
     public CommandResult execute(Model model, PersonListView personListView) throws CommandException {
         requireNonNull(model);
+        requireViewingKeptPersons(personListView);
+
         List<Person> lastShownList = model.getFilteredKeptPersonList();
-        requireIndicesInRange(model);
-        List<Person> personsToDelete = new ArrayList<>();
+        requireIndicesInRange(targetIndices, lastShownList);
+        List<Person> personsToDelete = collectItemsByIndices(targetIndices, lastShownList);
+        deletePersons(model, personsToDelete);
 
-        for (Index index : targetIndices) {
-            Person person = lastShownList.get(index.getZeroBased());
-            personsToDelete.add(person);
-        }
-
-        for (Person person : personsToDelete) {
-            model.deletePerson(person);
-        }
-
-        return new CommandResult(buildSuccessMessage(personsToDelete));
+        return new CommandResult(buildSuccessMessage(personsToDelete), PersonListView.KEPT_PERSONS);
     }
 
-    private void requireIndicesInRange(Model model) throws CommandException {
-        List<Person> lastShownList = model.getFilteredKeptPersonList();
-        for (Index targetIndex : targetIndices) {
-            if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
+    private void deletePersons(Model model, List<Person> persons) {
+        for (Person person : persons) {
+            model.deletePerson(person);
         }
     }
 
