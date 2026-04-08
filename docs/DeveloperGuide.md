@@ -583,7 +583,190 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+1. Launching with missing data file
+
+   1. Delete the `data/rosterbolt.json` file (if it exists) and launch the app.<br>
+      Expected: The app launches with sample contacts pre-loaded. A new data file is created after the first command.
+
+### Adding a person
+
+1. Adding a person with all required fields
+
+   1. Test case: `add n/John Doe p/98765432 e/johnd@example.com a/311 Clementi Ave 2`<br>
+      Expected: A new contact is added with the given details. Status message shows the added contact's details.
+
+   1. Test case: `add n/Jane Doe p/91234567 e/jane@example.com a/Blk 30 r/Usher nt/Prefers mornings t/volunteer`<br>
+      Expected: Contact added with role, notes, and tag fields populated.
+
+1. Adding a person with invalid fields
+
+   1. Test case: `add n/John Doe p/12 e/johnd@example.com a/addr`<br>
+      Expected: Error message about phone number requiring at least 3 digits. No contact added.
+
+   1. Test case: `add n/John Doe p/98765432 e/invalid a/addr`<br>
+      Expected: Error message about invalid email format. No contact added.
+
+   1. Test case: `add n/ p/98765432 e/johnd@example.com a/addr`<br>
+      Expected: Error message about blank name. No contact added.
+
+1. Adding a duplicate person
+
+   1. Prerequisites: A contact with phone `98765432` or email `johnd@example.com` already exists.
+
+   1. Test case: `add n/Different Name p/98765432 e/new@example.com a/addr`<br>
+      Expected: Error message indicating a duplicate person was found. No contact added.
+
+### Editing a person
+
+1. Editing a person's fields
+
+   1. Prerequisites: List all persons using `list`. At least one person in the list.
+
+   1. Test case: `edit 1 p/91234567`<br>
+      Expected: First person's phone number is updated. Status message shows the edited contact.
+
+   1. Test case: `edit 1 n/New Name e/new@example.com`<br>
+      Expected: First person's name and email are updated.
+
+1. Editing with no fields provided
+
+   1. Test case: `edit 1`<br>
+      Expected: Error message indicating at least one field must be provided.
+
+1. Editing to create a duplicate
+
+   1. Prerequisites: At least two persons in the list.
+
+   1. Test case: `edit 1 p/PHONE_OF_SECOND_PERSON`<br>
+      Expected: Error message indicating this person already exists in the address book.
+
+### Finding persons
+
+1. Finding by keyword (default)
+
+   1. Prerequisites: Multiple persons in the list, including one named "Alice".
+
+   1. Test case: `find Alice`<br>
+      Expected: Persons matching "Alice" are listed. Count shown in status message.
+
+   1. Test case: `find Alice Bob`<br>
+      Expected: Persons matching "Alice" OR "Bob" are listed.
+
+1. Finding by substring
+
+   1. Test case: `find m/ss ali`<br>
+      Expected: Persons whose fields contain "ali" as a substring are listed (e.g., "Alice").
+
+1. Finding by fuzzy match
+
+   1. Test case: `find m/fz Alic`<br>
+      Expected: Persons with approximately matching fields are listed, tolerating minor typos.
+
+1. Finding by availability
+
+   1. Prerequisites: At least one person with availability set to a known day and time range.
+
+   1. Test case: `find va/MONDAY,14:00,17:00`<br>
+      Expected: Only persons available during Monday 2PM–5PM are listed.
+
+### Viewing the recycle bin and restoring
+
+1. Viewing deleted contacts
+
+   1. Prerequisites: Delete at least one person using `delete 1`.
+
+   1. Test case: `bin`<br>
+      Expected: View switches to show deleted contacts. The previously deleted person is listed.
+
+1. Restoring a deleted contact
+
+   1. Prerequisites: At least one person in the bin (run `bin` to verify).
+
+   1. Test case: `restore 1`<br>
+      Expected: First person in the bin is restored to the active list. Status message confirms restoration.
+
+   1. Test case: `restore 0`<br>
+      Expected: Error message about invalid command format. Index must be a non-zero unsigned integer.
+
+### Sorting contacts
+
+1. Sorting by various attributes
+
+   1. Test case: `list name`<br>
+      Expected: All persons listed, sorted by name in ascending order.
+
+   1. Test case: `list name desc`<br>
+      Expected: All persons listed, sorted by name in descending order.
+
+   1. Test case: `list email`<br>
+      Expected: All persons listed, sorted by email in ascending order.
+
+### Statistics
+
+1. Viewing statistics
+
+   1. Prerequisites: At least one person with a role assigned.
+
+   1. Test case: `stats role`<br>
+      Expected: Role distribution statistics are displayed.
+
+   1. Test case: `stats record`<br>
+      Expected: Volunteer record statistics are displayed.
+
+   1. Test case: `stats invalid`<br>
+      Expected: Error message about invalid command format, showing the valid categories.
+
+### Command aliases
+
+1. Creating and using an alias
+
+   1. Test case: `alias ls list`<br>
+      Expected: Status message shows "Alias created: ls -> list".
+
+   1. Test case: `ls`<br>
+      Expected: Behaves the same as `list`, showing all contacts.
+
+   1. Test case: `aliases`<br>
+      Expected: Shows all defined aliases, including "ls -> list".
+
+1. Removing an alias
+
+   1. Test case: `unalias ls`<br>
+      Expected: Status message shows "Alias removed: ls".
+
+1. Invalid alias operations
+
+   1. Test case: `alias add list`<br>
+      Expected: Error message since "add" conflicts with an existing command word.
+
+   1. Test case: `alias ls alias`<br>
+      Expected: Error message since "alias" is not allowed as an alias target.
+
+### CSV import and export
+
+1. Exporting contacts
+
+   1. Prerequisites: At least one contact in the list.
+
+   1. Test case: `export test_output.csv`<br>
+      Expected: CSV file created at `test_output.csv`. Status message shows "Exported X volunteers to test_output.csv".
+
+1. Importing contacts
+
+   1. Prerequisites: A valid CSV file with headers `name,phone,email,address` and at least one data row.
+
+   1. Test case: `import test_output.csv` (using a previously exported file)<br>
+      Expected: Summary message showing "Imported X volunteers from test_output.csv" with duplicate and invalid row counts.
+
+   1. Test case: `import nonexistent.csv`<br>
+      Expected: Error message "Import failed: could not read file nonexistent.csv".
+
+### Clearing all data
+
+1. Clearing the address book
+
+   1. Test case: `clear`<br>
+      Expected: All contacts are permanently deleted. Status message shows "Cleared all persons."
 
 ### Deleting a person
 
@@ -600,12 +783,36 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+1. Deleting multiple persons
+
+   1. Prerequisites: List all persons using `list`. At least 3 persons in the list.
+
+   1. Test case: `delete 1 2 3`<br>
+      Expected: First three contacts are deleted. Status message shows details of all deleted contacts.
+
+1. Deleting while viewing filtered results
+
+   1. Prerequisites: Run `find Alice` so the list shows filtered results.
+
+   1. Test case: `delete 1`<br>
+      Expected: The first person in the filtered list is deleted, not the first person in the full list.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Dealing with missing data file
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Navigate to the `data/` folder and delete `rosterbolt.json`. Re-launch the app.<br>
+      Expected: The app starts with sample contacts. A new `rosterbolt.json` is created after the next command that modifies data.
 
-1. _{ more test cases …​ }_
+1. Dealing with corrupted data file
+
+   1. Open `data/rosterbolt.json` in a text editor. Replace its contents with invalid JSON (e.g., `{invalid}`).<br>
+      Expected: The app starts with an empty address book. A warning is logged about the corrupted file.
+
+   1. Open `data/rosterbolt.json` in a text editor. Change a `phone` field value to `"ab"` (invalid phone).<br>
+      Expected: The app starts with an empty address book because the data file fails validation.
+
+1. Verifying data persistence
+
+   1. Add a new contact using `add n/Test p/12345678 e/test@example.com a/Test Address`. Close the app and re-launch it.<br>
+      Expected: The newly added contact persists and is visible after re-launch.
