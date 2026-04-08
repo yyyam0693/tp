@@ -62,6 +62,22 @@ RosterBolt is a **desktop app for managing team contacts, optimized for use via 
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+
+</div>
+
+<div markdown="block" class="alert alert-info">
+
+**:information_source: Constraints on values in each field:**<br>
+
+* **Name**: Letters, numbers, and spaces only. Must start with letters or numbers, and must not be blank.
+* **Phone**: Numbers only, at least 3 digits.
+* **Email**: Must be in `local-part@domain` format. The local-part is made up of alphanumeric chunks, optionally separated by single special characters (`+_.-`). It must start and end with an alphanumeric character. The domain is made up of labels separated by periods, where each label must start and end with alphanumeric characters and may contain hyphens in between. The last domain label must be at least 2 characters long.
+* **Address**: Any characters allowed, but must not be blank or start with whitespace.
+* **Tag**: Letters and numbers only. Must not be blank.
+* **Role / Notes**: No restrictions. Setting blank is equivalent to removing the role/notes.
+* **Availability**: Must be in the format `DAY,HH:mm,HH:mm` (day, start time, end time), where `DAY` is a full day name (case-insensitive, e.g., `MONDAY`, `monday`, or `Monday`) and start time must be earlier than end time.
+* **Record**: Must be in the format `yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm` (start date-time, end date-time), and start date-time must be earlier than end date-time.
+
 </div>
 
 ### Viewing help : `help`
@@ -85,22 +101,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/
 A person can have any number of tags, availabilities, and records (including 0). Role and notes are optional.
 </div>
 
-<div markdown="block" class="alert alert-info">
-
-**:information_source: Constraints on values in each field:**<br>
-
-* **Name**: Letters, numbers, and spaces only. Must start with letters or numbers, and must not be blank.
-* **Phone**: Numbers only, at least 3 digits.
-* **Email**: Must be in `name@example.com` format. The part before `@` can include letters, numbers, and `+_.-` characters. The domain must end with a label at least 2 characters long.
-* **Address**: Must not be blank.
-* **Tag**: Letters and numbers only. Must not be blank.
-* **Role / Notes**: Can contain any characters. If left blank, the role will be shown as `Unassigned`, and the notes will be shown as `None`.
-
-</div>
-
 * A person is considered a duplicate if the phone number matches exactly, or the email matches case-insensitively.
-* `AVAILABILITIES` must be in the format `DAY,HH:mm,HH:mm` (day, start time, end time) where `DAY` is a full day name (case-insensitive, e.g., `MONDAY`, `monday`, or `Monday`) and start time is earlier than end time.
-* `RECORDS` must be in the format `yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm` (start date-time, end date-time) and start date-time must be earlier than end date-time.
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 r/Usher nt/Weekend only va/MONDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00`
@@ -180,8 +181,6 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES]
 * Existing values will be updated to the input values.
 * When editing tags, availabilities, or records, existing values of that field will be replaced (i.e. adding is not cumulative).
 * You can remove all the person’s tags, availabilities, records, role, or notes by typing `t/`, `va/`, `vr/`, `r/`, or `nt/` without specifying values after the prefix.
-* `AVAILABILITY` format: `DAY,HH:mm,HH:mm` where `DAY` is case-insensitive (e.g., `MONDAY,14:00,17:00`).
-* `RECORD` format: `yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm` (e.g., `2026-03-20T14:00,2026-03-20T17:00`).
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com va/MONDAY,18:00,20:00` Edits the phone number, email address, and availability of the 1st person.
