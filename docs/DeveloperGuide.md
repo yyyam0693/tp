@@ -592,11 +592,18 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a person with all required fields
 
+   1. Prerequisites: Must be viewing the working list (run `list` if unsure).
+
    1. Test case: `add n/John Doe p/98765432 e/johnd@example.com a/311 Clementi Ave 2`<br>
       Expected: A new contact is added with the given details. Status message shows the added contact's details.
 
    1. Test case: `add n/Jane Doe p/91234567 e/jane@example.com a/Blk 30 r/Usher nt/Prefers mornings t/volunteer`<br>
       Expected: Contact added with role, notes, and tag fields populated.
+
+1. Adding a person with missing required fields
+
+   1. Test case: `add n/John Doe p/98765432 a/addr`<br>
+      Expected: Error message about invalid command format. No contact added, as the required `e/` field is missing.
 
 1. Adding a person with invalid fields
 
@@ -620,7 +627,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Editing a person's fields
 
-   1. Prerequisites: List all persons using `list`. At least one person in the list.
+   1. Prerequisites: Must be viewing the working list. List all persons using `list`. At least one person in the list.
 
    1. Test case: `edit 1 p/91234567`<br>
       Expected: First person's phone number is updated. Status message shows the edited contact.
@@ -649,8 +656,8 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `find Alice`<br>
       Expected: Persons matching "Alice" are listed. Count shown in status message.
 
-   1. Test case: `find Alice Bob`<br>
-      Expected: Persons matching "Alice" OR "Bob" are listed.
+   1. Test case: `find m/kw Alice Bob`<br>
+      Expected: Persons matching "Alice" OR "Bob" are listed. The `m/kw` prefix explicitly selects keyword matching, which is also the default.
 
 1. Finding by substring
 
@@ -680,7 +687,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Restoring a deleted contact
 
-   1. Prerequisites: At least one person in the bin (run `bin` to verify).
+   1. Prerequisites: Must be viewing the recycle bin (run `bin` first). At least one person in the bin.
 
    1. Test case: `restore 1`<br>
       Expected: First person in the bin is restored to the active list. Status message confirms restoration.
@@ -765,14 +772,16 @@ testers are expected to do more *exploratory* testing.
 
 1. Clearing the address book
 
+   1. Prerequisites: Must be viewing the working list (run `list` if unsure). At least one contact in the list.
+
    1. Test case: `clear`<br>
-      Expected: All contacts are permanently deleted. Status message shows "Cleared all persons."
+      Expected: All contacts are moved to the recycle bin. Status message shows "Cleared all persons."
 
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: Must be viewing the working list. List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
