@@ -292,7 +292,12 @@ Format: `import FILE_PATH`
   * The following headers are optional: `role`, `notes`, `tags`, `availabilities`, `records`.
 * If the file cannot be found or read, the import fails with an error.
 * Rows with invalid data are skipped — valid rows in the same file are still imported.
-* Rows that duplicate an existing contact (same phone or email) are flagged separately.
+* Rows that duplicate an existing contact (same phone or email) are also skipped.
+* After the import completes, a summary message is shown:
+  * the number of volunteers successfully imported,
+  * the number of duplicate rows skipped,
+  * the number of invalid rows skipped, and
+  * the row numbers and reasons for any skipped rows.
 
 Examples:
 * `import data/volunteers.csv`
