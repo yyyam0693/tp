@@ -130,7 +130,7 @@ Examples:
 
 ### Listing all volunteers : `list`
 
-Shows all volunteers in your RosterBolt contact list, optionally sorted by a chosen attribute. This is useful for getting an overview of your roster or finding volunteers in a particular order.
+Lists all volunteers in your RosterBolt contact list, optionally sorted by a chosen attribute. This is useful for getting an overview of your roster or finding volunteers in a particular order.
 
 Format: `list [ATTRIBUTE [asc|desc]]`
 
@@ -166,7 +166,7 @@ Examples:
 
 ### Listing command aliases : `aliases`
 
-Shows all the command aliases you have set up, so you can check what shortcuts are available.
+Lists all the command aliases you've set up, so you can check what shortcuts are available.
 
 Format: `aliases`
 
@@ -181,7 +181,7 @@ Examples:
 
 ### Showing recycle bin of recently deleted volunteers : `bin`
 
-Opens the recycle bin, where you can see volunteers you have recently deleted. This gives you a safety net, so if you accidentally remove someone, you can find them here and restore them.
+Shows the recycle bin, where you can see volunteers you've recently deleted. This gives you a safety net, so if you accidentally remove someone, you can find them here and restore them.
 
 Format: `bin`
 
@@ -192,14 +192,14 @@ Format: `bin`
 
 ### Editing a volunteer : `edit`
 
-Updates the details of a volunteer that's already in your RosterBolt contact list. Use this when a volunteer changes their phone number, email, availability, or any other information.
+Edits the details of a volunteer that's already in your RosterBolt contact list. Use this when a volunteer changes their phone number, email, availability, or any other information.
 
 You must be viewing the working list to use this command. Otherwise, you'll see an error message and no changes will be made.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`
 
-* Updates the volunteer at the specified `INDEX`. The index is the number shown next to each volunteer in the currently displayed contact list, and **must be a positive integer** (1, 2, 3, ...).
-* You must provide at least one field to update.
+* Edits the volunteer at the specified `INDEX`. The index is the number shown next to each volunteer in the currently displayed contact list, and **must be a positive integer** (1, 2, 3, ...).
+* You must provide at least one field to edit.
 * The values you provide will replace the existing values for those fields.
 * When you edit tags, availabilities, or records, the new values will **replace all existing values** for that field (i.e., they aren't added on top of the old ones).
 * You can remove all the volunteer's tags, availabilities, records, role, or notes by typing `t/`, `va/`, `vr/`, `r/`, or `nt/` without specifying values after the prefix.
@@ -209,9 +209,9 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com va/MONDAY,18:00,20:00` Edits the phone number, email address, and availability of the 1st volunteer.
 *  `edit 2 n/Betsy Crower t/ va/ vr/` Edits the name of the 2nd volunteer and clears all existing tags, availabilities, and records.
 
-### Locating volunteers by keyword: `find`
+### Finding volunteers by keyword: `find`
 
-Searches your RosterBolt contact list for volunteers matching any of the given keywords, with an optional filter for availability. This is handy when you need to quickly find a specific volunteer, or locate everyone who is free on a particular day and time for an upcoming event.
+Finds volunteers in your RosterBolt contact list matching any of the given keywords, with an optional filter for availability. This is handy when you need to quickly find a specific volunteer, or locate everyone who is free on a particular day and time for an upcoming event.
 
 Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
 
@@ -242,7 +242,7 @@ Examples:
 
 ### Viewing volunteer statistics : `stats`
 
-Gives you a quick overview of your volunteer roster through text-based charts. Use this to spot patterns, like which roles are understaffed or who your most active volunteers are.
+Displays a quick overview of your volunteer roster through text-based charts. Use this to spot patterns, like which roles are understaffed or who your most active volunteers are.
 
 Format: `stats CATEGORY`
 
@@ -256,13 +256,13 @@ Examples:
 
 ### Deleting a volunteer : `delete`
 
-Removes volunteer(s) from your RosterBolt contact list. Don't worry, deleted volunteers are moved to the recycle bin, so you can [restore](#restoring-a-deleted-volunteer--restore) them if needed.
+Deletes volunteer(s) from your RosterBolt contact list. Don't worry, deleted volunteers are moved to the recycle bin, so you can [restore](#restoring-a-deleted-volunteer--restore) them if needed.
 
 You must be viewing the working list to use this command. Otherwise, you'll see an error message and no volunteer(s) will be deleted.
 
 Format: `delete INDEX [MORE_INDICES]`
 
-* Removes the volunteer(s) at the specified indices.
+* Deletes the volunteer(s) at the specified indices.
 * The indices are the numbers shown next to each volunteer in the currently displayed contact list.
 * Each index **must be a positive integer** (1, 2, 3, ...) and can't exceed the number of volunteers in the currently displayed list.
 * If you accidentally repeat an index, the duplicate indices will simply be ignored.
@@ -295,7 +295,7 @@ Examples:
 
 ### Importing volunteers from a CSV file : `import`
 
-Lets you add volunteers in bulk from a CSV (spreadsheet) file. This is useful when onboarding a large group of new volunteers at once, or migrating data from another tool.
+Imports volunteers in bulk from a CSV (spreadsheet) file. This is useful when onboarding a large group of new volunteers at once, or migrating data from another tool.
 
 Format: `import FILE_PATH`
 
@@ -316,7 +316,7 @@ Examples:
 
 ### Exporting volunteers to a CSV file : `export`
 
-Saves all your active volunteers to a CSV (spreadsheet) file. This is useful for creating backups, sharing your roster with others, or working with the data in spreadsheet software like Excel or Google Sheets.
+Exports all your active volunteers to a CSV (spreadsheet) file. This is useful for creating backups, sharing your roster with others, or working with the data in spreadsheet software like Excel or Google Sheets.
 
 Format: `export FILE_PATH`
 
@@ -327,7 +327,7 @@ Examples:
 
 ### Clearing all entries : `clear`
 
-Removes all volunteers from your active contact list at once. This is a quick way to start fresh, as all removed volunteers are moved to the recycle bin so you can still [restore](#restoring-a-deleted-volunteer--restore) them before closing the app.
+Clears all volunteers from your active contact list at once. This is a quick way to start fresh, as all removed volunteers are moved to the recycle bin so you can still [restore](#restoring-a-deleted-volunteer--restore) them before closing the app.
 
 You must be viewing the working list to use this command. Otherwise, you'll see an error message and your contacts won't be cleared.
 
@@ -337,13 +337,13 @@ Format: `clear`
 
 ### Exiting the program : `exit`
 
-Closes RosterBolt. Your volunteer data is saved automatically, but the recycle bin will be cleared, so make sure you've restored any accidentally deleted volunteers before exiting.
+Exits RosterBolt. Your volunteer data is saved automatically, but the recycle bin will be cleared, so make sure you've restored any accidentally deleted volunteers before exiting.
 
 Format: `exit`
 
 ### Editing the previous command : `editprev`
 
-Recalls your last successfully run command (other than `editprev` itself) and places it back in the command box for you to tweak and re-run. This saves you from retyping long commands.
+Loads your last successfully run command (other than `editprev` itself) back into the command box for you to edit and re-run. This saves you from retyping long commands.
 
 Format: `editprev`
 
