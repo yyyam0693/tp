@@ -16,18 +16,18 @@ RosterBolt reduces admin overhead by **streamlining repetitive tasks** (such as 
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. Make sure you have Java `17` or above installed on your computer.<br>
+   **Mac users:** Make sure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T12-1/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your RosterBolt.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar RosterBolt.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+1. Open a command terminal (e.g., Terminal on Mac, Command Prompt or PowerShell on Windows), navigate to the folder you put the jar file in using `cd`, and run `java -jar RosterBolt.jar`.<br>
+   A window similar to the one below should appear in a few seconds. It comes preloaded with some sample data so you can try out the commands right away.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+1. Type a command in the command box and press Enter to run it. For example, typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
@@ -40,7 +40,7 @@ RosterBolt reduces admin overhead by **streamlining repetitive tasks** (such as 
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+1. Check out the [Features](#features) section below for a full walkthrough of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ If you are using a PDF version of this document, be careful when copying and pas
 
 **:information_source: Notes about the command format:**<br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* Words in `UPPER_CASE` are the parameters you need to fill in.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
@@ -66,8 +66,8 @@ If you are using a PDF version of this document, be careful when copying and pas
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `exit`, `clear`, `bin`, `aliases` and `editprev`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* If you accidentally type extra text after commands that don't take parameters (such as `help`, `exit`, `clear`, `bin`, `aliases` and `editprev`), the extra text is simply ignored.<br>
+  e.g. if you type `help 123`, it will be interpreted as `help`.
 
 </div>
 
@@ -85,7 +85,7 @@ Instead, please consider rephrasing the input to avoid the need for such abbrevi
 
 **:information_source: Constraints on values in each field:**<br>
 
-Leading and trailing whitespace in each field value is trimmed before validation. A field is considered blank if nothing remains after trimming.
+Any extra whitespaces at the start or end of a field value are automatically removed before validation. A field is considered blank if nothing remains after removing these spaces.
 
 * **Name**: Letters, numbers, and spaces only. Must start with letters or numbers, and must not be blank.
 * **Phone**: Numbers only, at least 3 digits.
@@ -100,7 +100,7 @@ Leading and trailing whitespace in each field value is trimmed before validation
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens a help window with a link to this user guide, in case you need a quick reference while using the app.
 
 ![help message](images/helpMessage.png)
 
@@ -109,19 +109,18 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to RosterBolt.
+Adds a new volunteer to your RosterBolt contact list.
 
-You must be viewing the working list to use this command. Otherwise, an error message will be shown, and the person will not be added.
+You must be viewing the working list to use this command. Otherwise, you'll see an error message and the volunteer will not be added.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags, availabilities, and records (including 0). Role and notes are optional.
+You can give a volunteer any number of tags (e.g., `logistics`, `firstaid`), availability slots, and service records (including 0). Role and notes are optional.
 </div>
 
-* A person is considered a duplicate if the phone number matches exactly, or the email matches case-insensitively.
-  * If a duplicate is detected, the command is rejected and an error is shown.
-  * Email comparisons are case-insensitive across RosterBolt (e.g., `A@b.com` is treated as the same as `a@b.com`).
+* RosterBolt prevents duplicate entries. A volunteer is considered a duplicate if their phone number matches an existing contact exactly, or their email matches case-insensitively (e.g., `A@b.com` is treated as the same as `a@b.com`).
+  * If a duplicate is found, the command will not go through, and you'll see an error message.
 * See [field constraints](#field-constraints) for valid values for each field.
 
 Examples:
@@ -131,15 +130,15 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in RosterBolt, optionally sorted by an attribute.
+Shows all volunteers in your RosterBolt contact list, optionally sorted by a chosen attribute. This is useful for getting an overview of your roster or finding volunteers in a particular order.
 
 Format: `list [ATTRIBUTE [asc|desc]]`
 
 * Currently supported `ATTRIBUTE`: `name`, `phone`, `email`, `role`, `tag`, or `vr`.
 * Order defaults to `asc` when omitted.
 * Omitting `ATTRIBUTE` shows the list in the default order.
-* `vr` sorts by the end time of each volunteer's most recent record (i.e., `asc` lists least-recently served first, while `desc` lists most-recently served first).
-  * Volunteers without records are treated as least-recently served.
+* `vr` sorts by the end time of each volunteer's most recent service record. Use `list vr asc` to see who hasn't served recently (useful for distributing duties fairly), or `list vr desc` to see who served most recently.
+  * Volunteers without any volunteer records are treated as least-recently served (i.e., they appear first when sorting in ascending order, so you can easily spot who hasn't served yet).
 
 Examples:
 * `list`
@@ -149,16 +148,16 @@ Examples:
 
 ### Creating a command alias : `alias`
 
-Creates a custom alias for a supported built-in command word.
+Creates a custom shortcut (i.e., alias) for a built-in command. For example, if you frequently list your volunteers, you can type `alias ls list` so that typing `ls` works the same as `list`, saving you keystrokes during busy event days.
 
 Format: `alias SHORT COMMAND_WORD`
 
-* `SHORT` must be a lowercase command-word-style token.
-* `COMMAND_WORD` must be exactly one supported built-in command word: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, `restore` or `stats`.
-* Alias expansion replaces only the leading command word and appends the rest of the user input unchanged.
+* Your alias (`SHORT`) must start with a lowercase letter and contain only lowercase letters, numbers, or hyphens (like a command word).
+* `COMMAND_WORD` must be exactly one of the supported built-in commands: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, `restore` or `stats`.
+* When you use an alias, RosterBolt replaces only the alias with the full command word. Everything else you type after it is kept as-is.
 * `alias`, `aliases`, `unalias`, and `editprev` cannot be used as alias targets.
-* Aliases are treated as workflow preferences rather than roster data, so they are persisted in the user preferences file (default: `preferences.json`).
-* If invalid aliases are detected in `preferences.json` at startup, they are removed and shown once in the result display.
+* Your aliases are saved in your preferences file (`preferences.json`), and not in the volunteer data file, so they won't be lost if you clear or reset your roster.
+* If RosterBolt detects invalid aliases in `preferences.json` when it starts up, it will remove them and show you a one-time notice.
 
 Examples:
 * `alias ls list`
@@ -167,13 +166,13 @@ Examples:
 
 ### Listing command aliases : `aliases`
 
-Lists all defined command aliases.
+Shows all the command aliases you have set up, so you can check what shortcuts are available.
 
 Format: `aliases`
 
 ### Removing a command alias : `unalias`
 
-Removes an existing command alias.
+Removes an existing command alias, so you can remove an alias that you no longer need.
 
 Format: `unalias SHORT`
 
@@ -182,27 +181,27 @@ Examples:
 
 ### Showing recycle bin of recently deleted persons : `bin`
 
-Shows the recycle bin, which contains all recently deleted persons in RosterBolt.
+Opens the recycle bin, where you can see volunteers you have recently deleted. This gives you a safety net, so if you accidentally remove someone, you can find them here and restore them.
 
 Format: `bin`
 
-* Persons deleted by the `clear` and `delete` commands will be added to the recycle bin.
-* The recycle bin can contain duplicate persons (i.e., persons sharing the same phone number or email). For example, if you delete a person, add a new person with the same phone number, then delete the new person, both will appear in the recycle bin only if they do not have **all fields identical**.
-   * Conversely, if the 2nd person has **all fields identical** to the 1st person, then only one of them will be in the recycle bin.
-* The recycle bin is cleared when the application is closed.
+* Volunteers removed by the `delete` or `clear` commands are automatically placed in the recycle bin.
+* The recycle bin can contain duplicate volunteers with the same phone number or email. For example, if you delete a volunteer, add a new one with the same phone number, and then delete the new one too, both will appear in the recycle bin, so long as they are not **completely identical** in every field.
+   * If both volunteers are **completely identical** in every field, only one of them will be kept in the recycle bin.
+* The recycle bin is cleared when you close RosterBolt, so make sure to restore any accidentally deleted volunteers before exiting.
 
 ### Editing a person : `edit`
 
-Edits an existing person in RosterBolt.
+Updates the details of a volunteer that's already in your RosterBolt contact list. Use this when a volunteer changes their phone number, email, availability, or any other information.
 
-You must be viewing the working list to use this command. Otherwise, an error message will be shown, and no person will be edited.
+You must be viewing the working list to use this command. Otherwise, you'll see an error message and no changes will be made.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, ...​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, availabilities, or records, existing values of that field will be replaced (i.e. adding is not cumulative).
+* Updates the volunteer at the specified `INDEX`. The index is the number shown next to each volunteer in the currently displayed contact list, and **must be a positive integer** (1, 2, 3, ...).
+* You must provide at least one field to update.
+* The values you provide will replace the existing values for those fields.
+* When you edit tags, availabilities, or records, the new values will **replace all existing values** for that field (i.e., they are not added on top of the old ones).
 * You can remove all the person’s tags, availabilities, records, role, or notes by typing `t/`, `va/`, `vr/`, `r/`, or `nt/` without specifying values after the prefix.
 * See [field constraints](#field-constraints) for valid values for each field.
 
@@ -212,23 +211,23 @@ Examples:
 
 ### Locating persons by keyword: `find`
 
-Finds persons whose fields contain any of the given keywords, optionally filtered by volunteer availability.
+Searches your RosterBolt contact list for volunteers matching any of the given keywords, with an optional filter for availability. This is handy when you need to quickly find a specific volunteer, or locate everyone who is free on a particular day and time for an upcoming event.
 
 Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * The search covers all fields: name, phone, email, address, role, notes, and tags.
-* `m/kw` matches full words only. e.g. `Han` will not match `Hans`
-* `m/ss` matches substrings. e.g. `Han` will match `Hans`
-* `m/fz` allows small spelling mistakes. Words that are up to 2 simple edits away (in terms of adding, removing, or changing a letter) can still match. e.g. `michigan` will match `michegan`
+* `m/kw` (keyword) matches full words only. e.g. `Han` will not match `Hans`
+* `m/ss` (substring) matches substrings (i.e., parts of words). e.g. `Han` will match `Hans`
+* `m/fz` (fuzzy) allows small spelling mistakes. Words that are up to 2 edits away (in terms of adding, removing, or changing a letter) can still match. e.g. `michigan` will match `michegan`
 * `va/DAY,HH:mm,HH:mm` filters for volunteers whose availability covers the specified time period, i.e. the volunteer's availability is on the same day, starts at or before the specified start time, and ends at or after the specified end time. See [field constraints](#field-constraints) for the `AVAILABILITY` format.
 * At least one of keywords or `va/` must be provided.
 * When both keywords and `va/` are provided, only persons matching **both** the keyword search **and** the availability filter are returned.
 * If `m/MATCH_TYPE` is specified, at least one keyword must also be provided.
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* If you provide multiple keywords, volunteers matching **any** of them will be shown (i.e. it's an `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-* `MATCH_TYPE` is optional. When omitted, keyword matching is used.
+* `MATCH_TYPE` is optional. If you don't specify one, keyword matching (`m/kw`) is used by default.
 * Currently supported `MATCH_TYPE`: `kw`, `ss`, `fz`.
 
 Examples:
@@ -243,13 +242,13 @@ Examples:
 
 ### Viewing volunteer statistics : `stats`
 
-Displays volunteer statistics as text-based charts in the result display.
+Gives you a quick overview of your volunteer roster through text-based charts. Use this to spot patterns, like which roles are understaffed or who your most active volunteers are.
 
 Format: `stats CATEGORY`
 
 * Currently supported `CATEGORY`: `role`, `record`.
-* `role` shows the percentage distribution of volunteer roles (empty roles are shown as `Unassigned`).
-* `record` shows volunteers ranked by the number of volunteer records.
+* `role` shows the percentage breakdown of volunteer roles. Volunteers without a role are shown as `Unassigned`.
+* `record` ranks volunteers by how many volunteer records they have, so you can see who has been most (or least) active.
 
 Examples:
 * `stats role`
@@ -257,17 +256,17 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified persons from RosterBolt.
+Removes volunteer(s) from your RosterBolt contact list. Don't worry, deleted volunteers are moved to the recycle bin, so you can [restore](#restoring-a-deleted-person--restore) them if needed.
 
-You must be viewing the working list to use this command. Otherwise, an error message will be shown, and no persons will be deleted.
+You must be viewing the working list to use this command. Otherwise, you'll see an error message and no volunteer(s) will be deleted.
 
 Format: `delete INDEX [MORE_INDICES]`
 
-* Deletes the person at the specified indices.
-* Indices refer to index numbers shown in the displayed person list.
-* Indices **must be positive integers** e.g. 1, 2, 3, ...​, up to the number of persons in the currently displayed list.
-* Duplicate indices will be ignored.
-* Deleted persons will be added to the recycle bin.
+* Removes the volunteer(s) at the specified indices.
+* The indices are the numbers shown next to each volunteer in the currently displayed contact list.
+* Each index **must be a positive integer** (1, 2, 3, ...) and cannot exceed the number of volunteers in the currently displayed list.
+* If you accidentally repeat an index, the duplicate indices will simply be ignored.
+* All deleted volunteers will be moved to the recycle bin.
 
 Examples:
 * `list` followed by `delete 2 3` deletes the 2nd and 3rd persons in RosterBolt.
@@ -276,19 +275,19 @@ Examples:
 
 ### Restoring a deleted person : `restore`
 
-Restores the specified persons from RosterBolt.
+Restores volunteers that were previously deleted, recovering them from the recycle bin.
 
-You must be viewing the recycle bin to use this command. Otherwise, an error message will be shown, and no persons will be restored.
+You must be viewing the recycle bin to use this command. Otherwise, you'll see an error message and no volunteers will be restored.
 
 Format: `restore INDEX [MORE_INDICES]`
 
-* Restores the person at the specified indices.
-* Indices refer to index numbers shown in the displayed recycle bin.
-* Indices **must be positive integers** 1, 2, 3, …​
-* Duplicate indices will be ignored.
-* Restored persons will be removed from the recycle bin and added to the working list of kept contacts.
-* You cannot restore a person who is a duplicate of an existing contact in the working list (i.e., shares the same phone number or email). The command will be rejected with an error.
-* You cannot restore two persons who are duplicates of each other (same phone or email) in a single `restore` command. The command will be rejected with an error.
+* Restores the volunteers at the specified indices in the recycle bin.
+* The indices are the numbers shown next to each entry in the recycle bin.
+* Each index **must be a positive integer** (1, 2, 3, ...).
+* If you accidentally repeat an index, the duplicate indices will simply be ignored.
+* Restored volunteers are moved out of the recycle bin and added back into your active contact list.
+* You cannot restore a volunteer if someone with the same phone number or email already exists in your active contact list. The command will be rejected with an error explaining the conflict.
+* Similarly, you cannot restore two volunteers that share the same phone number or email in a single `restore` command.
 
 Examples:
 * `bin` followed by `restore 2 3` restores the 2nd and 3rd persons in the recycle bin.
@@ -296,60 +295,60 @@ Examples:
 
 ### Importing volunteers from a CSV file : `import`
 
-Imports volunteers from a CSV file into the active address book.
+Lets you add volunteers in bulk from a CSV (spreadsheet) file. This is useful when onboarding a large group of new volunteers at once, or migrating data from another tool.
 
 Format: `import FILE_PATH`
 
-* The CSV file must include the headers `name`, `phone`, `email`, and `address`. 
+* Your CSV file must include the column headers `name`, `phone`, `email`, and `address`. 
   * The following headers are optional: `role`, `notes`, `tags`, `availabilities`, `records`.
-* If the file cannot be found or read, the import fails with an error.
+* If the file cannot be found or read, the import will fail, and you'll see an error message.
 * Values in each column must conform to the [field constraints](#field-constraints).
-* Rows with invalid data are skipped — valid rows in the same file are still imported.
-* Rows that duplicate an existing contact (same phone or email) are also skipped.
-* After the import completes, a summary message is shown:
-  * the number of volunteers successfully imported,
-  * the number of duplicate rows skipped,
-  * the number of invalid rows skipped, and
-  * the row numbers and reasons for any skipped rows.
+* Rows with invalid data are skipped, but valid rows in the same file are still imported, meaning one bad row won't block the rest.
+* Rows that match an existing contact's phone number or email are also skipped to avoid duplicates.
+* After the import finishes, you'll see a summary showing:
+  * The number of volunteers successfully imported,
+  * The number of duplicate rows skipped,
+  * The number of invalid rows skipped, and
+  * The row numbers and reasons for any skipped rows.
 
 Examples:
 * `import data/volunteers.csv`
 
 ### Exporting volunteers to a CSV file : `export`
 
-Exports all active volunteers in the address book to a CSV file.
+Saves all your active volunteers to a CSV (spreadsheet) file. This is useful for creating backups, sharing your roster with others, or working with the data in spreadsheet software like Excel or Google Sheets.
 
 Format: `export FILE_PATH`
 
-* If a file already exists at the given path, it will be overwritten without warning.
+* If a file already exists at the given path, it will be overwritten without warning, so double-check the path to avoid accidentally replacing an important file.
 
 Examples:
 * `export data/volunteers.csv`
 
 ### Clearing all entries : `clear`
 
-Clears all entries from RosterBolt.
+Removes all volunteers from your active contact list at once. This is a quick way to start fresh, as all removed volunteers are moved to the recycle bin so you can still [restore](#restoring-a-deleted-person--restore) them before closing the app.
 
-You must be viewing the working list to use this command. Otherwise, an error message will be shown, and your contacts will not be cleared.
+You must be viewing the working list to use this command. Otherwise, you'll see an error message and your contacts will not be cleared.
 
 Format: `clear`
 
-* Deleted persons will be added to the recycle bin.
+* All removed volunteers are placed in the recycle bin.
 
 ### Exiting the program : `exit`
 
-Exits the program.
+Closes RosterBolt. Your volunteer data is saved automatically, but the recycle bin will be cleared, so make sure you've restored any accidentally deleted volunteers before exiting.
 
 Format: `exit`
 
 ### Editing the previous command : `editprev`
 
-Loads the last successfully executed command, excluding `editprev`, into the command box so you can edit and run it again.
+Recalls your last successfully run command (other than `editprev` itself) and places it back in the command box for you to tweak and re-run. This saves you from retyping long commands.
 
 Format: `editprev`
 
-* Only the last successful non-`editprev` command is remembered for the current session.
-* `editprev` does not execute the recalled command. You can change it first before pressing Enter.
+* Only the most recent successful command (excluding `editprev`) is remembered for the current session.
+* The recalled command is not run automatically, meaning you can edit it first and press Enter when you're ready.
 
 Examples:
 * `list` followed by `editprev` loads `list` back into the command box.
@@ -357,29 +356,25 @@ Examples:
 
 ### Saving the data
 
-RosterBolt data are saved to the hard disk automatically after any command that changes the data. There is no need to save manually.
+Your volunteer data is saved to disk automatically whenever you make a change. There's no need to save manually.
 
-If a command is executed successfully but RosterBolt fails to save the updated data to the hard disk, the result display will still show the command’s success message, together with an error message explaining that saving failed and a warning that the changes are not saved and will be lost if the application is closed.
+If a command runs successfully but RosterBolt can't save to disk (e.g., due to a file permissions issue), you’ll see the command’s success message along with a warning that the changes were not saved and will be lost if you close the app.
 
 ### Editing the data file
 
-RosterBolt data are saved automatically as a JSON file `[JAR file location]/data/rosterbolt.json`. Advanced users are welcome to update data directly by editing that data file.
+Your volunteer data is stored as a JSON file at `[JAR file location]/data/rosterbolt.json`. If you're an advanced user who's comfortable editing JSON, you can update the data directly in this file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, RosterBolt will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the RosterBolt to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your edits make the file's format invalid, RosterBolt will discard all data and start with an empty file on the next launch. Always back up the file before editing it.<br>
+Additionally, entering values outside the acceptable range can cause unexpected behaviour. Only edit the data file if you are confident you can do so correctly.
 </div>
-
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous RosterBolt home folder.
+**Q**: How do I transfer my data to another computer?<br>
+**A**: Install RosterBolt on the other computer, then copy the data file from your old RosterBolt home folder and use it to replace the empty data file in the new installation.
 
 --------------------------------------------------------------------------------------------------------------------
 
