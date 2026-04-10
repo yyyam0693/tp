@@ -7,7 +7,7 @@ RosterBolt is a **desktop app for managing team contacts, optimized for use via 
 
 RosterBolt is built for **volunteer coordinators** who run recurring events and manage **20-500 volunteers** on their own. It is a **single-user, offline, CLI-first** contact management tool designed for fast typists who prefer keyboards to mouse interactions, are comfortable with CLI apps, and may operate without Internet access.
 
-RosterBolt reduces admin overhead by **streamlining repetitive tasks** (such as bulk deleting or modifying contacts) so you can manage volunteer manpower **efficiently and accurately**.
+RosterBolt reduces admin overhead by **streamlining repetitive tasks** (such as bulk deleting or modifying contacts) so you can manage volunteer manpower **efficiently and accurately**. It also lets you **track volunteer availability and service history**, **view participation statistics** at a glance, and **import/export volunteer data via CSV** for easy migration and sharing with other tools.
 
 * Table of Contents
 {:toc}
