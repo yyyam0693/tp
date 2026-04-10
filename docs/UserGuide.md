@@ -78,6 +78,7 @@ RosterBolt, however, does **NOT** support multiple-character abbreviations after
 Instead, please consider rephrasing the input to avoid the need for such abbreviations (e.g., `he or she`), or using supported single-character abbreviations (e.g., `h/s` instead of `he/she`).
 </div>
 
+<a id="field-constraints"></a>
 <div markdown="block" class="alert alert-info">
 
 **:information_source: Constraints on values in each field:**<br>
@@ -119,8 +120,7 @@ A person can have any number of tags, availabilities, and records (including 0).
 * A person is considered a duplicate if the phone number matches exactly, or the email matches case-insensitively.
   * If a duplicate is detected, the command is rejected and an error is shown.
   * Email comparisons are case-insensitive across RosterBolt (e.g., `A@b.com` is treated as the same as `a@b.com`).
-* `AVAILABILITY` must be in the format `DAY,HH:mm,HH:mm` (day, start time, end time) where `DAY` is a full day name (case-insensitive, e.g., `MONDAY`, `monday`, or `Monday`) and start time is earlier than end time.
-* `RECORD` must be in the format `yyyy-MM-ddTHH:mm,yyyy-MM-ddTHH:mm` (start date-time, end date-time) and start date-time must be earlier than end date-time.
+* See [field constraints](#field-constraints) for valid values for each field.
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 r/Usher nt/Weekend only va/MONDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00`
@@ -202,6 +202,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES]
 * Existing values will be updated to the input values.
 * When editing tags, availabilities, or records, existing values of that field will be replaced (i.e. adding is not cumulative).
 * You can remove all the person’s tags, availabilities, records, role, or notes by typing `t/`, `va/`, `vr/`, `r/`, or `nt/` without specifying values after the prefix.
+* See [field constraints](#field-constraints) for valid values for each field.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com va/MONDAY,18:00,20:00` Edits the phone number, email address, and availability of the 1st person.
@@ -219,7 +220,7 @@ Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
 * `m/kw` matches full words only. e.g. `Han` will not match `Hans`
 * `m/ss` matches substrings. e.g. `Han` will match `Hans`
 * `m/fz` allows small spelling mistakes. Words that are up to 2 simple edits away (in terms of adding, removing, or changing a letter) can still match. e.g. `michigan` will match `michegan`
-* `va/DAY,HH:mm,HH:mm` filters for volunteers whose availability covers the specified time period, i.e. the volunteer's availability is on the same day, starts at or before the specified start time, and ends at or after the specified end time. `DAY` is a full day name (case-insensitive, e.g., `MONDAY`), and start time must be before end time.
+* `va/DAY,HH:mm,HH:mm` filters for volunteers whose availability covers the specified time period, i.e. the volunteer's availability is on the same day, starts at or before the specified start time, and ends at or after the specified end time. See [field constraints](#field-constraints) for the `AVAILABILITY` format.
 * At least one of keywords or `va/` must be provided.
 * When both keywords and `va/` are provided, only persons matching **both** the keyword search **and** the availability filter are returned.
 * If `m/MATCH_TYPE` is specified, at least one keyword must also be provided.
@@ -300,6 +301,7 @@ Format: `import FILE_PATH`
 * The CSV file must include the headers `name`, `phone`, `email`, and `address`. 
   * The following headers are optional: `role`, `notes`, `tags`, `availabilities`, `records`.
 * If the file cannot be found or read, the import fails with an error.
+* Values in each column must conform to the [field constraints](#field-constraints).
 * Rows with invalid data are skipped — valid rows in the same file are still imported.
 * Rows that duplicate an existing contact (same phone or email) are also skipped.
 * After the import completes, a summary message is shown:
