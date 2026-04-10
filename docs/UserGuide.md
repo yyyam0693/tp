@@ -392,6 +392,7 @@ _Details coming soon ..._
 
 ## Command summary
 
+<!-- The `list` row uses a Unicode fullwidth vertical bar (U+FF5C: ｜) instead of ASCII pipe (|) to avoid breaking the Markdown table. -->
 Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague r/Usher nt/Available weekends va/SUNDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00`
@@ -406,7 +407,7 @@ Action | Format, Examples
 **Export** | `export FILE_PATH`<br> e.g., `export data/volunteers.csv`
 **Find** | `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`, `find m/fz michigan`, `find va/MONDAY,14:00,17:00`, `find va/MONDAY,14:00,17:00 alice`
 **Import** | `import FILE_PATH`<br> e.g., `import data/volunteers.csv`
-**List** | `list [ATTRIBUTE [asc|desc]]`<br> e.g., `list name desc`, `list vr desc`
+**List** | `list [ATTRIBUTE [asc｜desc]]`<br> e.g., `list name desc`, `list vr desc`
 **Exit** | `exit`
 **Help** | `help`
 **Restore** | `restore INDEX [MORE_INDICES]`<br> e.g., `restore 2 3`
