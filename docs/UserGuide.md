@@ -67,7 +67,7 @@ If you're using a PDF version of this document, be careful when copying and past
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
 * If you accidentally type extra text after commands that don't take parameters (such as `help`, `exit`, `clear`, `bin`, `aliases` and `editprev`), the extra text is simply ignored.<br>
-  e.g. if you type `help 123`, it will be interpreted as `help`.
+  e.g. if you type `help 123`, it'll be interpreted as `help`.
 
 </div>
 
@@ -154,10 +154,10 @@ Format: `alias SHORT COMMAND_WORD`
 
 * Your alias (`SHORT`) must start with a lowercase letter and contain only lowercase letters, numbers, or hyphens (like a command word).
 * `COMMAND_WORD` must be exactly one of the supported built-in commands: `add`, `bin`, `clear`, `delete`, `edit`, `exit`, `export`, `find`, `help`, `import`, `list`, `restore` or `stats`.
-* When you use an alias, RosterBolt replaces only the alias with the full command word. Everything else you type after it is kept as-is.
+* When you use an alias, RosterBolt replaces only the alias with the full command word. Everything else you type after is kept as-is.
 * `alias`, `aliases`, `unalias`, and `editprev` can't be used as alias targets.
 * Your aliases are saved in your preferences file (`preferences.json`), and not in the volunteer data file, so they won't be lost if you clear or reset your roster.
-* If RosterBolt detects invalid aliases in `preferences.json` when it starts up, it will remove them and show you a one-time notice.
+* If RosterBolt detects invalid aliases in `preferences.json` when it starts up, it'll remove them and show you a one-time notice.
 
 Examples:
 * `alias ls list`
@@ -211,7 +211,7 @@ Examples:
 
 ### Finding volunteers by keyword: `find`
 
-Finds volunteers in your RosterBolt contact list matching any of the given keywords, with an optional filter for availability. This is handy when you need to quickly find a specific volunteer, or locate everyone who is free on a particular day and time for an upcoming event.
+Finds volunteers in your RosterBolt contact list matching any of the given keywords, with an optional filter for availability. This is handy when you need to quickly find a specific volunteer, or locate everyone who's free on a particular day and time for an upcoming event.
 
 Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
 
@@ -320,7 +320,7 @@ Exports all your active volunteers to a CSV (spreadsheet) file. This is useful f
 
 Format: `export FILE_PATH`
 
-* If a file already exists at the given path, it will be overwritten without warning, so double-check the path to avoid accidentally replacing an important file.
+* If a file already exists at the given path, it'll be overwritten without warning, so double-check the path to avoid accidentally replacing an important file.
 
 Examples:
 * `export data/volunteers.csv`
