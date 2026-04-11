@@ -64,7 +64,7 @@ If you're using a PDF version of this document, be careful when copying and past
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `n/NAME p/PHONE`, `p/PHONE n/NAME` is also acceptable.
 
 * If you accidentally type extra text after commands that don't take parameters (such as `help`, `exit`, `clear`, `bin`, `aliases` and `editprev`), the extra text is simply ignored.<br>
   e.g. if you type `help 123`, it'll be interpreted as `help`.
@@ -113,7 +113,7 @@ Adds a new volunteer to your RosterBolt contact list.
 
 You must be viewing the working list to use this command. Otherwise, you'll see an error message and the volunteer won't be added.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​`
+Format: `add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can give a volunteer any number of tags (e.g., `logistics`, `firstaid`), availability slots, and volunteer records (including 0). Role and notes are optional.
@@ -390,14 +390,14 @@ Additionally, entering values outside the acceptable range can cause unexpected 
 <!-- The `list` row uses a Unicode fullwidth vertical bar (U+FF5C: ｜) instead of ASCII pipe (|) to avoid breaking the Markdown table. -->
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague r/Usher nt/Available weekends va/SUNDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00`
+**Add** | `add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]…​ [r/ROLE] [nt/NOTES] [va/AVAILABILITY]…​ [vr/RECORD]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague r/Usher nt/Available weekends va/SUNDAY,14:00,17:00 vr/2026-03-20T14:00,2026-03-20T17:00`
 **Alias** | `alias SHORT COMMAND_WORD`<br> e.g., `alias ls list`
 **Aliases** | `aliases`
 **Unalias** | `unalias SHORT`<br> e.g., `unalias ls`
 **Bin** | `bin`
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]`<br> e.g., `delete 2 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com va/MONDAY,14:00,17:00`
+**Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES] [t/TAG]…​ [va/AVAILABILITY]…​ [vr/RECORD]…​`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com va/MONDAY,14:00,17:00`
 **Edit Previous** | `editprev`
 **Export** | `export FILE_PATH`<br> e.g., `export data/volunteers.csv`
 **Find** | `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`<br> e.g., `find m/kw James Jake`, `find m/ss ali`, `find m/fz michigan`, `find va/MONDAY,14:00,17:00`, `find va/MONDAY,14:00,17:00 alice`
