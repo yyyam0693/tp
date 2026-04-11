@@ -223,7 +223,7 @@ Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
     e.g. `Hans Bo` returns `Hans Gruber`, `Bo Yang`
 * **Match type (`m/MATCH_TYPE`):**
   * `MATCH_TYPE` is optional. If you don't specify one, keyword matching (`m/kw`) is used by default.
-  * Currently supported `MATCH_TYPE`: `kw`, `ss`, `fz`.
+  * Currently supported `MATCH_TYPE`: `kw`, `ss`, `fz`. Note that `MATCH_TYPE` is case-sensitive (e.g. `m/KW` is not valid).
   * If `m/MATCH_TYPE` is specified, at least one keyword must also be provided.
   * `m/kw` (keyword) matches full words only. e.g. `Han` doesn't match `Hans`
   * `m/ss` (substring) matches substrings (i.e., parts of words). e.g. `Han` matches `Hans`
@@ -232,8 +232,8 @@ Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
   * `va/DAY,HH:mm,HH:mm` filters for volunteers whose availability covers the specified time period, i.e. the volunteer's availability is on the same day, starts at or before the specified start time, and ends at or after the specified end time.
   * See [field constraints](#field-constraints) for the `AVAILABILITY` format.
 * **General constraints:**
-  * At least one of keywords or `va/` must be provided.
-  * Keywords must appear after all prefixes (i.e., after `m/` and/or `va/`). For example, `find va/MONDAY,14:00,17:00 alice` is valid, but `find alice va/MONDAY,14:00,17:00` is not.
+  * At least one keyword or `va/` must be provided.
+  * The `m/` and `va/` prefixes can appear in any order, but keywords must appear after all prefixes. For example, `find va/MONDAY,14:00,17:00 alice` and `find va/MONDAY,14:00,17:00 m/kw alice` are valid, but `find alice va/MONDAY,14:00,17:00` is not.
   * When both keywords and `va/` are provided, only volunteers matching at least one keyword **and** the availability filter are returned. Note that this means the search uses mixed logic: keywords are matched among themselves using `OR`, while the availability filter is applied on top as an additional `AND` condition.
 
 Examples:
