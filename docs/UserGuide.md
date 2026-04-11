@@ -27,7 +27,7 @@ RosterBolt reduces admin overhead by **streamlining repetitive tasks** (such as 
    A window similar to the one below should appear in a few seconds. It comes preloaded with some sample data so you can try out the commands right away.<br>
    ![Ui](images/Ui.png)
 
-1. Type a command in the command box and press Enter to run it. For example, typing **`help`** and pressing Enter will open the help window.<br>
+1. Type a command in the command box and press Enter to run it. For example, typing **`help`** and pressing Enter opens the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
@@ -67,7 +67,7 @@ If you're using a PDF version of this document, be careful when copying and past
   e.g. if the command specifies `n/NAME p/PHONE`, `p/PHONE n/NAME` is also acceptable.
 
 * If you accidentally type extra text after commands that don't take parameters (such as `help`, `exit`, `clear`, `bin`, `aliases` and `editprev`), the extra text is simply ignored.<br>
-  e.g. if you type `help 123`, it'll be interpreted as `help`.
+  e.g. if you type `help 123`, it's interpreted as `help`.
 
 </div>
 
@@ -157,7 +157,7 @@ Format: `alias SHORT COMMAND_WORD`
 * When you use an alias, RosterBolt replaces only the alias with the full command word. Everything else you type after is kept as-is.
 * `alias`, `aliases`, `unalias`, and `editprev` can't be used as alias targets.
 * Your aliases are saved in your preferences file (`preferences.json`), and not in the volunteer data file, so they won't be lost if you clear or reset your roster.
-* If RosterBolt detects invalid aliases in `preferences.json` when it starts up, it'll remove them and show you a one-time notice.
+* If RosterBolt detects invalid aliases in `preferences.json` when it starts up, it removes them and shows you a one-time notice.
 
 Examples:
 * `alias ls list`
@@ -186,8 +186,8 @@ Shows the recycle bin, where you can see volunteers you've recently deleted. Thi
 Format: `bin`
 
 * Volunteers removed by the `delete` or `clear` commands are automatically placed in the recycle bin.
-* The recycle bin can contain duplicate volunteers with the same phone number or email. For example, if you delete a volunteer, add a new one with the same phone number, and then delete the new one too, both will appear in the recycle bin, so long as they aren't **completely identical** in every field.
-   * If both volunteers are **completely identical** in every field, only one of them will be kept in the recycle bin.
+* The recycle bin can contain duplicate volunteers with the same phone number or email. For example, if you delete a volunteer, add a new one with the same phone number, and then delete the new one too, both appear in the recycle bin, so long as they aren't **completely identical** in every field.
+   * If both volunteers are **completely identical** in every field, only one of them is kept in the recycle bin.
 * The recycle bin is cleared when you close RosterBolt, so make sure to restore any accidentally deleted volunteers before exiting.
 
 ### Editing a volunteer : `edit`
@@ -200,8 +200,8 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/ROLE] [nt/NOTES]
 
 * Edits the volunteer at the specified `INDEX`. The index is the number shown next to each volunteer in the currently displayed contact list, and **must be a positive integer** (1, 2, 3, ...).
 * You must provide at least one field to edit.
-* The values you provide will replace the existing values for those fields.
-* When you edit tags, availabilities, or records, the new values will **replace all existing values** for that field (i.e., they aren't added on top of the old ones).
+* The values you provide replace the existing values for those fields.
+* When you edit tags, availabilities, or records, the new values **replace all existing values** for that field (i.e., they aren't added on top of the old ones).
 * You can remove all the volunteer's tags, availabilities, records, role, or notes by typing `t/`, `va/`, `vr/`, `r/`, or `nt/` without specifying values after the prefix.
 * See [field constraints](#field-constraints) for valid values for each field.
 
@@ -215,18 +215,18 @@ Finds volunteers in your RosterBolt contact list matching any of the given keywo
 
 Format: `find [m/MATCH_TYPE] [va/DAY,HH:mm,HH:mm] [KEYWORD [MORE_KEYWORDS]]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords doesn't matter. e.g. `Hans Bo` will match `Bo Hans`
+* The search is case-insensitive. e.g. `hans` matches `Hans`
+* The order of the keywords doesn't matter. e.g. `Hans Bo` matches `Bo Hans`
 * The search covers all fields: name, phone, email, address, role, notes, and tags.
-* `m/kw` (keyword) matches full words only. e.g. `Han` won't match `Hans`
-* `m/ss` (substring) matches substrings (i.e., parts of words). e.g. `Han` will match `Hans`
-* `m/fz` (fuzzy) allows small spelling mistakes. Words that are up to 2 edits away (in terms of adding, removing, or changing a letter) can still match. e.g. `michigan` will match `michegan`
+* `m/kw` (keyword) matches full words only. e.g. `Han` doesn't match `Hans`
+* `m/ss` (substring) matches substrings (i.e., parts of words). e.g. `Han` matches `Hans`
+* `m/fz` (fuzzy) allows small spelling mistakes. Words that are up to 2 edits away (in terms of adding, removing, or changing a letter) can still match. e.g. `michigan` matches `michegan`
 * `va/DAY,HH:mm,HH:mm` filters for volunteers whose availability covers the specified time period, i.e. the volunteer's availability is on the same day, starts at or before the specified start time, and ends at or after the specified end time. See [field constraints](#field-constraints) for the `AVAILABILITY` format.
 * At least one of keywords or `va/` must be provided.
 * When both keywords and `va/` are provided, only volunteers matching **both** the keyword search **and** the availability filter are returned.
 * If `m/MATCH_TYPE` is specified, at least one keyword must also be provided.
-* If you provide multiple keywords, volunteers matching **any** of them will be shown (i.e. it's an `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* If you provide multiple keywords, volunteers matching **any** of them are shown (i.e. it's an `OR` search).
+  e.g. `Hans Bo` returns `Hans Gruber`, `Bo Yang`
 * `MATCH_TYPE` is optional. If you don't specify one, keyword matching (`m/kw`) is used by default.
 * Currently supported `MATCH_TYPE`: `kw`, `ss`, `fz`.
 
@@ -265,8 +265,8 @@ Format: `delete INDEX [MORE_INDICES]`
 * Deletes the volunteer(s) at the specified indices.
 * The indices are the numbers shown next to each volunteer in the currently displayed contact list.
 * Each index **must be a positive integer** (1, 2, 3, ...) and can't exceed the number of volunteers in the currently displayed list.
-* If you accidentally repeat an index, the duplicate indices will simply be ignored.
-* All deleted volunteers will be moved to the recycle bin.
+* If you accidentally repeat an index, the duplicate indices are simply ignored.
+* All deleted volunteers are moved to the recycle bin.
 
 Examples:
 * `list` followed by `delete 2 3` deletes the 2nd and 3rd volunteers in RosterBolt.
@@ -284,7 +284,7 @@ Format: `restore INDEX [MORE_INDICES]`
 * Restores the volunteers at the specified indices in the recycle bin.
 * The indices are the numbers shown next to each entry in the recycle bin.
 * Each index **must be a positive integer** (1, 2, 3, ...).
-* If you accidentally repeat an index, the duplicate indices will simply be ignored.
+* If you accidentally repeat an index, the duplicate indices are simply ignored.
 * Restored volunteers are moved out of the recycle bin and added back into your active contact list.
 * You can't restore a volunteer if someone with the same phone number or email already exists in your active contact list. The command will be rejected with an error explaining the conflict.
 * Similarly, you can't restore two volunteers that share the same phone number or email in a single `restore` command.
@@ -301,9 +301,9 @@ Format: `import FILE_PATH`
 
 * Your CSV file must include the column headers `name`, `phone`, `email`, and `address`. 
   * The following headers are optional: `role`, `notes`, `tags`, `availabilities`, `records`.
-* If the file can't be found or read, the import will fail, and you'll see an error message.
+* If the file can't be found or read, the import fails, and you'll see an error message.
 * Values in each column must conform to the [field constraints](#field-constraints).
-* Rows with invalid data are skipped, but valid rows in the same file are still imported, meaning one bad row won't block the rest.
+* Rows with invalid data are skipped, but valid rows in the same file are still imported, meaning one bad row doesn't block the rest.
 * Rows that match an existing contact's phone number or email are also skipped to avoid duplicates.
 * After the import finishes, you'll see a summary showing:
   * The number of volunteers successfully imported,
@@ -320,7 +320,7 @@ Exports all your active volunteers to a CSV (spreadsheet) file. This is useful f
 
 Format: `export FILE_PATH`
 
-* If a file already exists at the given path, it'll be overwritten without warning, so double-check the path to avoid accidentally replacing an important file.
+* If a file already exists at the given path, it's overwritten without warning, so double-check the path to avoid accidentally replacing an important file.
 
 Examples:
 * `export data/volunteers.csv`
@@ -365,7 +365,7 @@ If a command runs successfully but RosterBolt can't save to disk (e.g., due to a
 Your volunteer data is stored as a JSON file at `[JAR file location]/data/rosterbolt.json`. If you're an advanced user who's comfortable editing JSON, you can update the data directly in this file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your edits make the file's format invalid, RosterBolt will discard all data and start with an empty file on the next launch. Always back up the file before editing it.<br>
+If your edits make the file's format invalid, RosterBolt discards all data and starts with an empty file on the next launch. Always back up the file before editing it.<br>
 Additionally, entering values outside the acceptable range can cause unexpected behaviour. Only edit the data file if you're confident you can do so correctly.
 </div>
 
@@ -380,7 +380,7 @@ Additionally, entering values outside the acceptable range can cause unexpected 
 
 ## Known issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI opens off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
