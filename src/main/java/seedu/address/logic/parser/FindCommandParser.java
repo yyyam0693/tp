@@ -151,8 +151,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         // First token is the availability; any remaining tokens are keywords (handled later).
         String availToken = ParserUtil.tokenizeSpaceSeparated(trimmed).get(0);
         if (!VolunteerAvailability.isValidAvailability(availToken)) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(VolunteerAvailability.MESSAGE_CONSTRAINTS);
         }
         return VolunteerAvailability.fromString(availToken);
     }

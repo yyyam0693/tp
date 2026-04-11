@@ -161,11 +161,11 @@ public class FindCommandParserTest {
     public void parse_invalidAvailability_throwsParseException() {
         // Invalid day
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY + "NOTADAY,14:00,17:00",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                VolunteerAvailability.MESSAGE_CONSTRAINTS);
 
         // Start after end
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY + "MONDAY,17:00,14:00",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                VolunteerAvailability.MESSAGE_CONSTRAINTS);
 
         // Empty availability value
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY,
@@ -173,15 +173,15 @@ public class FindCommandParserTest {
 
         // Invalid time format
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY + "MONDAY,25:00,17:00",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                VolunteerAvailability.MESSAGE_CONSTRAINTS);
 
         // Missing end time
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY + "MONDAY,14:00",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                VolunteerAvailability.MESSAGE_CONSTRAINTS);
 
         // Non-time garbage
         assertParseFailure(parser, " " + PREFIX_AVAILABILITY + "MONDAY,abc,def",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                VolunteerAvailability.MESSAGE_CONSTRAINTS);
     }
 
     @Test
