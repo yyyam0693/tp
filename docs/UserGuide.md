@@ -342,11 +342,11 @@ Exports all your active volunteers to a CSV (spreadsheet) file. This is useful f
 
 When you are viewing the contact list, RosterBolt exports the contacts currently displayed on screen. This means any active `find` filter is respected.
 
-When you are viewing the normal unfiltered contact list, RosterBolt exports all kept contacts.
+When you are viewing the normal unfiltered contact list, RosterBolt exports all active contacts.
 
 Deleted contacts are never exported.
 
-If you run `export` while viewing the recycle bin, RosterBolt exports the kept contact list instead and switches your view back to the contact list.
+If you run `export` while viewing the recycle bin, RosterBolt exports the active contact list instead and switches your view back to the contact list.
 
 Format: `export FILE_PATH`
 
