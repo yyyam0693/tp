@@ -143,8 +143,7 @@ Format: `list [ATTRIBUTE [asc|desc]]`
   * Order defaults to `asc` when omitted.
 * **Sort behavior per attribute:**
   * `name` sorts alphabetically by the volunteer's name (case-insensitive).
-  * `phone` sorts lexicographically by volunteer's phone number, not numerically (e.g., `100` appears before `20`, since `1` is lexicographically smaller than `2`).
-  * `phone` sorts lexicographically character-by-character (not numerically), so phones starting with `+` appear before plain-digit phones in `list phone asc` and after them in `list phone desc`, and `100` appears before `20`, since `1` is lexicographically smaller than `2`.
+  * `phone` sorts lexicographically character-by-character (not numerically), so `100` appears before `20` and phones starting with `+` appear before plain-digit phones in `list phone asc` (and after them in `list phone desc`).
   * `email` sorts alphabetically by the volunteer's email address (case-insensitive).
   * `address` sorts alphabetically by the volunteer's address (case-insensitive).
   * `role` sorts alphabetically by the volunteer's role (case-insensitive).
