@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.getErrorMessageForDuplicatePrefixes;
 import static seedu.address.logic.parser.CliSyntax.KNOWN_PERSON_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_AVAILABILITY;
@@ -99,6 +100,9 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         if (tags.isEmpty()) {
             return Optional.empty();
+        }
+        if (tags.contains("") && !areAllValuesEmpty(tags)) {
+            throw new ParseException(getErrorMessageForDuplicatePrefixes(PREFIX_TAG));
         }
         Collection<String> tagSet = areAllValuesEmpty(tags) ? Collections.emptySet() : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
