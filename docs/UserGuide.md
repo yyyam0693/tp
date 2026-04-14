@@ -226,7 +226,7 @@ Format: `aliases`
 Examples:
 * With no aliases defined, `aliases` shows `No aliases defined.`.
 * `alias ls list` followed by `aliases` includes `ls -> list` in the alias list.
-* `alias f find` followed by `alias ls list`, then `aliases`, includes both aliases sorted by alias name.
+* `alias f find` followed by `alias ls list`, then `aliases`, includes both aliases sorted by alias name in ascending order.
 
 ### Removing a command alias : `unalias`
 
@@ -472,6 +472,7 @@ Format: `clear`
 
 Examples:
 * `list` followed by `clear` moves every active volunteer into the recycle bin and leaves the active list empty.
+* `find Alex` followed by `clear` ALSO moves every active volunteer into the recycle bin, not just the filtered search results.
 * `clear` followed by `bin` lets you review the cleared volunteers and restore any that were removed by mistake.
 * `bin` followed by `clear` is rejected with `You must be viewing the contact list of active volunteers to perform this command.`
 
